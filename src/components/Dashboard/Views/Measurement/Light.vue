@@ -6,7 +6,7 @@
         <circle-number-chart-card :number="50"
                            title="Level"
                            description="Light Intensity"
-                           color="green">
+                           color="brown">
         </circle-number-chart-card>
       </div>
     </div>
