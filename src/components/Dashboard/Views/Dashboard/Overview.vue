@@ -1,6 +1,7 @@
 <template>
   <div>
     <!--Stats cards-->
+    {{info}}
     <div class="row">
       <div class="col-lg-3 col-sm-6" v-for="stats in statsCards" >
         <stats-card v-bind:style="stats.styleObject" >
@@ -21,6 +22,7 @@
   </div>
 </template>
 <script>
+  import axios from 'axios'
   import CircleChartCard from 'src/components/UIComponents/Cards/CircleChartCard.vue'
   import StatsCard from 'src/components/UIComponents/Cards/StatsCard.vue'
   import ChartCard from 'src/components/UIComponents/Cards/ChartCard.vue'
@@ -116,9 +118,22 @@
               line: 'ct-line ct-green'
             }
           }
-        }
+        },
+        info: {}
 
       }
+    },
+    created () {
+      axios.get('http://34.87.108.195/api/v1/summary/acac4896-6458-45a8-a51d-781012ade0db', {headers: {'session': '9f8ef8d5-cfcf-4c51-ab2e-eadd7ef10653'}}).then(
+        res => {
+          this.info = res.data
+        },
+        console.log(this.info),
+        this.statsCards[0]['value'] = this.info.median_temperature,
+        this.statsCards[1]['value'] = this.info.median_humidity
+        // statsCards[2]['value'] = this.info.median_temperature,
+        // statsCards[3]['value'] = this.info.median_temperature
+      )
     }
   }
 
