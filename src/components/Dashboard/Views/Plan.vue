@@ -97,12 +97,15 @@
 
             <fieldset>
               <div class="form-group">
-                <label class="col-sm-2 control-label">Input with success</label>
+                <label class="col-sm-2 control-label">Level</label>
                 <div class="col-sm-3">
-                  <input type="text" placeholder="enter value" value="0" class="form-control"/>
+                  <input type="int" placeholder="enter value" value="0" class="form-control"/>
                 </div>
               </div>
             </fieldset>
+            <center>
+              <button type="submit" class="btn btn-fill btn-info " v-bind:style="{ padding: 30}">Create a plan</button>
+            </center>
           </form>
         </div>
       </div>  <!-- end card -->
@@ -120,8 +123,8 @@
         timePicker: '',
         radios: {
           radio1: '1',
-          radio2: '2',
-          radio3: '2'
+          radio2: '1',
+          radio3: '1'
         },
         checkboxes: {
           first: false,
