@@ -35,23 +35,27 @@
           <div class="container">
             <div class="row">
               <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
-                <form method="#" action="#">
+                <form action="#" method="#">
                   <div class="card" data-background="color" data-color="blue">
                     <div class="card-header">
                       <h3 class="card-title">Login</h3>
                     </div>
                     <div class="card-content">
                       <div class="form-group">
-                        <label>Email address</label>
-                        <input type="email" placeholder="Enter email" class="form-control input-no-border">
+                        <label>Username</label>
+                        <input type="text" placeholder="Enter username" class="form-control input-no-border" v-model='username'>
                       </div>
                       <div class="form-group">
                         <label>Password</label>
-                        <input type="password" placeholder="Password" class="form-control input-no-border">
+                        <input type="password" placeholder="Password" class="form-control input-no-border" v-model='password'>
                       </div>
                     </div>
                     <div class="card-footer text-center">
-                      <button type="submit" class="btn btn-fill btn-wd ">Log in</button>
+                      <button class="btn btn-fill btn-wd ">
+                        <router-link to="/admin/overview">
+                          <a @click='login'>Login</a>
+                        </router-link>
+                      </button>
                       <div class="forgot">
                         <router-link to="/register">
                           Need an account? Sign up
@@ -88,8 +92,36 @@
   </div>
 </template>
 <script>
+  import axios from 'axios'
+  import store from 'src/vuex/store'
+  import Vuex from 'vuex'
+  global.vuex = Vuex
   export default {
+    data () {
+      return {
+        username: null,
+        password: null,
+        info: {}
+      }
+    },
+    store,
     methods: {
+      login () {
+        let payload = {
+          'name': this.username,
+          'password': this.password
+        }
+        return axios.post('http://34.87.108.195/api/v1/session', payload).then(
+          res => {
+            this.info = res.data
+            console.log(this.info)
+            store.commit('SESSION_CHANGE', this.info['session'])
+            store.commit('USERID_CHANGE', this.info['user_id'])
+            store.commit('NAME_CHANGE', this.info['user'])
+            store.commit('CONTROLLERID_CHANGE', this.info)
+          }
+        )
+      },
       toggleNavbar () {
         document.body.classList.toggle('nav-open')
       },
