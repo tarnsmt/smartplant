@@ -67,23 +67,28 @@
                   <div class="card card-plain">
                     <div class="content">
                       <div class="form-group">
-                        <input type="email" placeholder="Your First Name" class="form-control">
+                        <input type="text" placeholder="Your First Name" class="form-control">
                       </div>
                       <div class="form-group">
-                        <input type="email" placeholder="Your Last Name" class="form-control">
+                        <input type="text" placeholder="Your Last Name" class="form-control">
                       </div>
                       <div class="form-group">
-                        <input type="email" placeholder="Enter email" class="form-control">
+                        <input type="text" placeholder="Username" class="form-control" v-model='username'>
                       </div>
                       <div class="form-group">
-                        <input type="password" placeholder="Password" class="form-control">
+                        <input type="password" placeholder="Password" class="form-control" v-model='password'>
                       </div>
                       <div class="form-group">
                         <input type="password" placeholder="Password Confirmation" class="form-control">
                       </div>
                     </div>
                     <div class="footer text-center">
-                      <button type="button" class="btn btn-fill btn-danger btn-wd">Create Account</button>
+                      <button class="btn btn-fill btn-danger btn-wd ">
+                        <router-link to="/login">
+                          <a @click='createAccount'>Create Account</a>
+                        </router-link>
+                      </button>
+                      <button type="button" class="btn btn-fill btn-danger btn-wd">Create Accountaa</button>
                     </div>
                   </div>
                 </form>
@@ -111,8 +116,27 @@
   </div>
 </template>
 <script>
+  import axios from 'axios'
   export default {
+    data () {
+      return {
+        username: null,
+        password: null
+      }
+    },
     methods: {
+      createAccount () {
+        let payload = {
+          'name': this.username,
+          'password': this.password
+        }
+        return axios.post('http://34.87.108.195/api/v1/user', payload).then(
+          res => {
+            this.info = res.data
+            alert('Sucessfully create an account!')
+          }
+        )
+      },
       toggleNavbar () {
         document.body.classList.toggle('nav-open')
       },
