@@ -11,10 +11,11 @@
 </template>
 
 <script>
+  import store from './vuex/store'
   // Loading some plugin css asynchronously
   import('sweetalert2/dist/sweetalert2.css')
   import('vue-notifyjs/themes/default.css')
-  export default {}
+  export default {store}
 </script>
 <style lang="scss">
   .notifications.vue-notifyjs {
