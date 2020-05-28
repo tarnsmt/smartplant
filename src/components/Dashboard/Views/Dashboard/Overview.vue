@@ -93,7 +93,7 @@
               color: '#ffd0dd'
             },
             icon: 'ti-world',
-            title: 'Weather Condition',
+            title: 'Condition',
             value: '',
             footerText: 'In the last hour',
             footerIcon: 'ti-timer'

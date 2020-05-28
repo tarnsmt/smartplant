@@ -18,6 +18,9 @@ import Calendar from 'src/components/Dashboard/Views/Calendar/CalendarRoute.vue'
 // Plan
 import Plan from 'src/components/Dashboard/Views/Plan.vue'
 
+// Plan
+import Summary from 'src/components/Dashboard/Views/Summary.vue'
+
 let measurementMenu = {
   path: '/measurement',
   component: DashboardLayout,
@@ -67,6 +70,11 @@ const routes = [
         path: 'plan',
         name: 'Plan',
         component: Plan
+      },
+      {
+        path: 'summary',
+        name: 'Summary',
+        component: Summary
       }
     ]
   },

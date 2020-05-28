@@ -31,6 +31,11 @@ export default [
     path: '/plan'
   },
   {
+    name: 'Summary',
+    icon: 'ti-image',
+    path: '/summary'
+  },
+  {
     name: 'Calendar',
     icon: 'ti-calendar',
     path: '/calendar'
