@@ -85,7 +85,7 @@
                 <div class="form-group">
                   <el-time-select
                     style="margin-left: 15px;"
-                    v-model="time.monthlyTime"
+                    v-model="time.weeklyTime"
                     :picker-options="{
                       start: '00:00',
                       step: '00:15',
