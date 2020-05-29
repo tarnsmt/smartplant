@@ -9,41 +9,35 @@
           <form method="get" action="/" class="form-horizontal">
           <legend>Create a plan</legend>
             <fieldset>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">Plant</label>
+              <div class="form-group" v-for="info in infoDatas" >
+                <label class="col-sm-2 control-label">{{info.title}}</label>
                 <div class="col-sm-10">
-                  <p class="form-control-static">plant name</p>
+                  <p class="form-control-static">{{info.value}}</p>
                 </div>
               </div>
             </fieldset>
+          </form>
+        </div>
+        <center>
+          <button type="submit" class="btn btn-fill btn-info">Create a plan</button>
+          <hr>
+        </center>
+      </div>  <!-- end card -->
+    </div> <!-- end col-md-12 -->
 
+    <!-- Daily plan -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-content">
+          <form method="get" action="/" class="form-horizontal">
+          <legend>Daily plan</legend>
             <fieldset>
               <div class="form-group">
-                <label class="col-sm-2 control-label">Plant Description</label>
-                <div class="col-sm-10">
-                  <p class="form-control-static">plant description</p>
-                </div>
-              </div>
-            </fieldset>
-
-            <fieldset>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">Choose plan</label>
-                <div class="col-sm-10">
-                  <p-radio label="1" v-model="radios.radio1">Daily</p-radio>
-                  <p-radio label="2" v-model="radios.radio1">Weekly</p-radio>
-                  <p-radio label="3" v-model="radios.radio1">Monthly</p-radio>
-                </div>
-              </div>
-            </fieldset>
-
-            <fieldset>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">Set time</label>
+                <label class="col-sm-3 control-label">Set time</label>
                 <div class="form-group">
                   <el-time-select
                     style="margin-left: 15px;"
-                    v-model="timePicker"
+                    v-model="time.dailyTime"
                     :picker-options="{
                       start: '00:00',
                       step: '00:15',
@@ -56,60 +50,170 @@
             </fieldset>
 
             <fieldset>
-              <legend>Setting</legend>
-
-              <fieldset>
-                <div class="form-group">
-                  <label class="col-sm-2 control-label">Select sensor</label>
-                  <div class="col-sm-10">
-                    <p-radio label="1" v-model="radios.radio2">Light</p-radio>
-                    <p-radio label="2" v-model="radios.radio2">Water</p-radio>
-                  </div>
-                </div>
-              </fieldset>
-
               <div class="form-group">
-                <label class="col-sm-2 control-label">Select day</label>
-                <!-- <div class="col-sm-4 col-sm-offset-1">
-                  <p-checkbox v-model="checkboxes.unchecked">Unchecked</p-checkbox>
-                  <p-checkbox v-model="checkboxes.checked">Unchecked</p-checkbox>
-                  <p-checkbox v-model="checkboxes.disabledUnchecked" :disabled="true">Disabled unchecked</p-checkbox>
-                  <p-checkbox v-model="checkboxes.disabledChecked" :disabled="true">Disabled checked</p-checkbox>
-                </div> -->
-
-                <div class="col-sm-2">
-                  <p-radio label="1" v-model="radios.radio3">Mon</p-radio>
-                  <p-radio label="4" v-model="radios.radio3">Thurs</p-radio>
-                  <p-radio label="7" v-model="radios.radio3">Sun</p-radio>
-                </div>
-
-                <div class="col-sm-2">
-                  <p-radio label="2" v-model="radios.radio3">Tue</p-radio>
-                  <p-radio label="5" v-model="radios.radio3">Fri</p-radio>
-                </div>
-
-                <div class="col-sm-2">
-                  <p-radio label="3" v-model="radios.radio3">Wed</p-radio>
-                  <p-radio label="6" v-model="radios.radio3">Sat</p-radio>
+                <label class="col-sm-3 control-label">Type</label>
+                <div class="col-sm-3">
+                  <p-radio label="1" v-model="type.dailyType">Light</p-radio>
+                  <p-radio label="2" v-model="type.dailyType">Water</p-radio>
                 </div>
               </div>
             </fieldset>
 
             <fieldset>
               <div class="form-group">
-                <label class="col-sm-2 control-label">Level</label>
-                <div class="col-sm-3">
+                <label class="col-sm-3 control-label">Level</label>
+                <div class="col-sm-4">
                   <input type="int" placeholder="enter value" value="0" class="form-control"/>
                 </div>
               </div>
             </fieldset>
-            <center>
-              <button type="submit" class="btn btn-fill btn-info " v-bind:style="{ padding: 30}">Create a plan</button>
-            </center>
           </form>
         </div>
       </div>  <!-- end card -->
-    </div> <!-- end col-md-12 -->
+    </div> <!-- end col-md-4 -->
+    <!-- end Daily plan -->
+
+    <!-- Weekly plan -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-content">
+          <form method="get" action="/" class="form-horizontal">
+          <legend>Weekly plan</legend>
+            <fieldset>
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Set time</label>
+                <div class="form-group">
+                  <el-time-select
+                    style="margin-left: 15px;"
+                    v-model="time.monthlyTime"
+                    :picker-options="{
+                      start: '00:00',
+                      step: '00:15',
+                      end: '23:59'
+                    }"
+                    placeholder="Select time">
+                  </el-time-select>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <fieldset>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Type</label>
+                  <div class="col-sm-3">
+                    <p-radio label="1" v-model="type.weeklyType">Light</p-radio>
+                    <p-radio label="2" v-model="type.weeklyType">Water</p-radio>
+                  </div>
+                </div>
+              </fieldset>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Select day</label>
+
+                <div class="col-sm-3">
+                  <p-radio label="1" v-model="day.weeklyDay">Mon</p-radio>
+                  <p-radio label="4" v-model="day.weeklyDay">Thur</p-radio>
+                  <p-radio label="7" v-model="day.weeklyDay">Sun</p-radio>
+                </div>
+
+                <div class="col-sm-3">
+                  <p-radio label="2" v-model="day.weeklyDay">Tue</p-radio>
+                  <p-radio label="5" v-model="day.weeklyDay">Fri</p-radio>
+                </div>
+
+                <div class="col-sm-3">
+                  <p-radio label="3" v-model="day.weeklyDay">Wed</p-radio>
+                  <p-radio label="6" v-model="day.weeklyDay">Sat</p-radio>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Level</label>
+                <div class="col-sm-5">
+                  <input type="int" placeholder="enter value" value="0" class="form-control"/>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+      </div>  <!-- end card -->
+    </div> <!-- end col-md-4 -->
+    <!-- end Weekly plan -->
+
+    <!-- Weekly plan -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-content">
+          <form method="get" action="/" class="form-horizontal">
+          <legend>Monthly plan</legend>
+            <fieldset>
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Set time</label>
+                <div class="form-group">
+                  <el-time-select
+                    style="margin-left: 15px;"
+                    v-model="time.monthlyTime"
+                    :picker-options="{
+                      start: '00:00',
+                      step: '00:15',
+                      end: '23:59'
+                    }"
+                    placeholder="Select time">
+                  </el-time-select>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <fieldset>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Type</label>
+                  <div class="col-sm-3">
+                    <p-radio label="1" v-model="type.monthlyType">Light</p-radio>
+                    <p-radio label="2" v-model="type.monthlyType">Water</p-radio>
+                  </div>
+                </div>
+              </fieldset>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Select day</label>
+
+                <div class="col-sm-3">
+                  <p-radio label="1" v-model="day.monthlyDay">Mon</p-radio>
+                  <p-radio label="4" v-model="day.monthlyDay">Thur</p-radio>
+                  <p-radio label="7" v-model="day.monthlyDay">Sun</p-radio>
+                </div>
+
+                <div class="col-sm-3">
+                  <p-radio label="2" v-model="day.monthlyDay">Tue</p-radio>
+                  <p-radio label="5" v-model="day.monthlyDay">Fri</p-radio>
+                </div>
+
+                <div class="col-sm-3">
+                  <p-radio label="3" v-model="day.monthlyDay">Wed</p-radio>
+                  <p-radio label="6" v-model="day.monthlyDay">Sat</p-radio>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Level</label>
+                <div class="col-sm-5">
+                  <input type="int" placeholder="enter value" value="0" class="form-control"/>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+      </div>  <!-- end card -->
+    </div> <!-- end col-md-4 -->
+    <!-- end Weekly plan -->
+
+
   </div>
 </template>
 <script>
@@ -120,22 +224,41 @@
     },
     data () {
       return {
-        timePicker: '',
-        radios: {
-          radio1: '1',
-          radio2: '1',
-          radio3: '1'
+        infoDatas: [
+          {
+            title: 'Name',
+            value: '0'
+          },
+          {
+            title: 'Light',
+            value: '0'
+          },
+          {
+            title: 'Humidity',
+            value: '0'
+          },
+          {
+            title: 'Temperature',
+            value: '0'
+          },
+          {
+            title: 'Soil Condition',
+            value: '0'
+          }
+        ],
+        time: {
+          dailyTime: '',
+          weekyTime: '',
+          monthlyTime: ''
         },
-        checkboxes: {
-          first: false,
-          second: false,
-          a: false,
-          b: false,
-          c: false,
-          unchecked: false,
-          checked: true,
-          disabledUnchecked: false,
-          disabledChecked: true
+        type: {
+          dailyType: '1',
+          weeklyType: '1',
+          monthlyType: '1'
+        },
+        day: {
+          weeklyDay: '1',
+          monthlyDay: '1'
         }
       }
     }

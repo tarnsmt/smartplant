@@ -10,7 +10,7 @@
           </div>
           <div class="numbers" slot="content" >
             <p>{{stats.title}}</p>
-            <p style="font-size: 22px">{{stats.value}}</p>
+            <p style="font-size: 19px; padding-left: 0px">{{stats.value}}</p>
           </div>
           <div class="stats" slot="footer" v-bind:style="stats.styleIcon">
             <i :class="stats.footerIcon"></i> {{stats.footerText}}
