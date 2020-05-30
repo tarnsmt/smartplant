@@ -24,10 +24,10 @@
         </form>
         <ul class="nav navbar-nav navbar-right">
           <li class="open">
-            <router-link to="/login" class="dropdown-toggle btn-magnify" data-toggle="dropdown">
+            <a @click='logout' class="dropdown-toggle btn-magnify" data-toggle="dropdown">
               <i class="ti-shift-right"></i>
               <p>Logout</p>
-            </router-link>
+            </a>
           </li>
         </ul>
       </div>
@@ -35,13 +35,31 @@
   </nav>
 </template>
 <script>
+  import store from 'src/vuex/store'
   export default {
+    store,
     data () {
       return {
-        activeNotifications: false
+        activeNotifications: false,
+        login: store.state.login
       }
     },
     methods: {
+      logout () {
+        store.commit('LOGIN_CHANGE', false)
+        store.commit('SESSION_CHANGE', '')
+        store.commit('USERID_CHANGE', '')
+        store.commit('NAME_CHANGE', '')
+        store.commit('PASSWORD_CHANGE', '')
+        store.commit('CONTROLLERID_CHANGE', '')
+        store.commit('TEMP_CHANGE', '')
+        store.commit('LIGHT_CHANGE', '')
+        store.commit('HUMIDITY_CHANGE', '')
+        store.commit('WATERLEVEL_CHANGE', '')
+        store.commit('SOILMOISTURE_CHANGE', '')
+        store.commit('SUMMARY_CHANGE', {})
+        this.$router.push('/login')
+      },
       capitalizeFirstLetter (string) {
         return string.charAt(0).toUpperCase() + string.slice(1)
       },
