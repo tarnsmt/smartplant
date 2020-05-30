@@ -100,7 +100,9 @@
         username: null,
         password: null,
         info: {},
-        loginstate: store.state.login
+        loginstate: store.state.login,
+        validate: 'credentials not match or user does not exist',
+        apipayload: {}
       }
     },
     store,
@@ -108,28 +110,37 @@
       checkLogin () {
         if (this.loginstate) { this.$router.push('/admin/overview') } else { alert('Please Login or Register before enter the dashboard') }
       },
-      login () {
+      async login () {
         if (this.username === null || this.password === null) {
           alert('Please enter username and password')
-          // this.$router.push('#')
         } else {
           let payload = {
             'name': this.username,
             'password': this.password
           }
-          store.commit('NAME_CHANGE', this.username)
-          store.commit('PASSWORD_CHANGE', this.password)
-          return axios.post('http://34.87.108.195/api/v1/session', payload).then(
+          this.apipayload = payload
+          await axios.post('http://34.87.108.195/api/v1/session', this.apipayload, { validateStatus: false }).then(
             res => {
-              this.info = res.data
-              store.commit('SESSION_CHANGE', this.info['session'])
-              store.commit('USERID_CHANGE', this.info['user_id'])
-              store.commit('NAME_CHANGE', this.info['user'])
-              store.commit('CONTROLLERID_CHANGE', this.info)
-              store.commit('LOGIN_CHANGE', true)
-              this.$router.push('/admin/overview')
+              this.validate = res.data['message']
             }
           )
+          if (this.validate === 'credentials not match or user does not exist') {
+            alert('Wrong username or password\nPlease re-enter again')
+          } else {
+            store.commit('NAME_CHANGE', this.username)
+            store.commit('PASSWORD_CHANGE', this.password)
+            return axios.post('http://34.87.108.195/api/v1/session', payload).then(
+              res => {
+                this.info = res.data
+                store.commit('SESSION_CHANGE', this.info['session'])
+                store.commit('USERID_CHANGE', this.info['user_id'])
+                store.commit('NAME_CHANGE', this.info['user'])
+                store.commit('CONTROLLERID_CHANGE', this.info)
+                store.commit('LOGIN_CHANGE', true)
+                this.$router.push('/admin/overview')
+              }
+            )
+          }
         }
       },
       toggleNavbar () {
