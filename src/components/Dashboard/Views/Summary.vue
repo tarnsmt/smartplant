@@ -60,12 +60,13 @@
   import Vue from 'vue'
   import {Table, TableColumn, Select, Option} from 'element-ui'
   import PPagination from 'src/components/UIComponents/Pagination.vue'
-  import summary from './summary'
+  import store from 'src/vuex/store'
   Vue.use(Table)
   Vue.use(TableColumn)
   Vue.use(Select)
   Vue.use(Option)
   export default{
+    store,
     components: {
       PPagination
     },
@@ -116,7 +117,7 @@
     data () {
       return {
         pagination: {
-          perPage: 5,
+          perPage: 10,
           currentPage: 1,
           perPageOptions: [5, 10, 25, 50],
           total: 0
@@ -155,7 +156,7 @@
             minWidth: 100
           }
         ],
-        tableData: summary
+        tableData: store.state.summary
       }
     }
   }
