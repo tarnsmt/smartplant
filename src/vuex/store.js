@@ -12,11 +12,14 @@ const state = {
   userid: '',
   controllerid: '',
   username: '',
+  password: '',
   temperaturevalue: '',
   humidityvalue: '',
   lightvalue: '',
   waterlevelvalue: '',
-  soilmoisturevalue: ''
+  soilmoisturevalue: '',
+  summary: {},
+  login: false
 }
 
 // Create an object storing various mutations. We will write the mutation
@@ -34,6 +37,9 @@ const mutations = {
   NAME_CHANGE: (state, value) => {
     state.username = value
   },
+  PASSWORD_CHANGE: (state, value) => {
+    state.password = value
+  },
   TEMP_CHANGE: (state, value) => {
     state.temperaturevalue = value
   },
@@ -48,6 +54,12 @@ const mutations = {
   },
   SOILMOISTURE_CHANGE: (state, value) => {
     state.soilmoisturevalue = value
+  },
+  SUMMARY_CHANGE: (state, value) => {
+    state.summary = value
+  },
+  LOGIN_CHANGE: (state, value) => {
+    state.login = value
   }
 }
 
@@ -56,11 +68,14 @@ const getters = {
   userid: state => state.userid,
   controllerid: state => state.controllerid,
   username: state => state.username,
+  password: state => state.password,
   temperaturevalue: state => state.temperaturevalue,
   lightvalue: state => state.lightvalue,
   humidityvalue: state => state.humidityvalue,
   waterlevelvalue: state => state.waterlevelvalue,
-  soilmoisturevalue: state => state.soilmoisturevalue
+  soilmoisturevalue: state => state.soilmoisturevalue,
+  summary: state => state.summary,
+  login: state => state.login
 }
 
 const actions = {
@@ -76,6 +91,9 @@ const actions = {
   saveUserName: (state, value) => {
     store.commit('NAME_CHANGE', value)
   },
+  savePassword: (state, value) => {
+    store.commit('PASSWORD_CHANGE', value)
+  },
   saveTemperature: (state, value) => {
     store.commit('TEMP_CHANGE', value)
   },
@@ -90,6 +108,12 @@ const actions = {
   },
   saveSoilMoisture: (state, value) => {
     store.commit('SOILMOISTURE_CHANGE', value)
+  },
+  saveSummary: (state, value) => {
+    store.commit('SUMMARY_CHANGE', value)
+  },
+  saveLogin: (state, value) => {
+    store.commit('LOGIN_CHANGE', value)
   }
 }
 
