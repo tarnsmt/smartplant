@@ -133,6 +133,8 @@
         userid: store.state.userid,
         controllerid: store.state.controllerid,
         username: store.state.username,
+        password: store.state.password,
+        login: store.state.login,
         uv: null,
         humidity: null,
         temperature: null,
@@ -143,7 +145,9 @@
         plantLight: null,
         plantWaterLevel: null,
         soilmoisture: null,
-        location: null
+        location: null,
+        summary: null,
+        temp: null
       }
     },
     created () {
@@ -195,23 +199,27 @@
     },
     methods: {
       fetchData () {
-        axios.get('http://34.87.108.195/api/v1/summary/acac4896-6458-45a8-a51d-781012ade0db', {headers: {'session': store.state.session}}).then(
-        res => {
-          this.info = res.data
-          this.info = this.info['summary_list'][0]
-          this.plantTemp = this.info['median_temperature']
-          this.plantHumidity = this.info['median_humidity']
-          this.plantLight = this.info['median_light']
-          this.plantWaterLevel = this.info['median_water_level']
-          this.soilmoisture = this.info['median_soil_moisture']
-          store.commit('TEMP_CHANGE', this.plantTemp)
-          store.commit('LIGHT_CHANGE', this.plantLight)
-          store.commit('HUMIDITY_CHANGE', this.plantHumidity)
-          store.commit('WATERLEVEL_CHANGE', this.plantWaterLevel)
-          store.commit('SOILMOISTURE_CHANGE', this.soilmoisture)
-          // this.info = this.timer
+        if (this.login) {
+          axios.get('http://34.87.108.195/api/v1/summary/ea60c35b-79d1-49b1-9b55-86554f8c4afa', {headers: {'session': this.session}}).then(
+          res => {
+            this.info = res.data
+            this.summary = res.data['summary_list']
+            this.info = this.info['summary_list'][0]
+            this.plantTemp = this.info['median_temperature']
+            this.plantHumidity = this.info['median_humidity']
+            this.plantLight = this.info['median_light']
+            this.plantWaterLevel = this.info['median_water_level']
+            this.soilmoisture = this.info['median_soil_moisture']
+            store.commit('TEMP_CHANGE', this.plantTemp)
+            store.commit('LIGHT_CHANGE', this.plantLight)
+            store.commit('HUMIDITY_CHANGE', this.plantHumidity)
+            store.commit('WATERLEVEL_CHANGE', this.plantWaterLevel)
+            store.commit('SOILMOISTURE_CHANGE', this.soilmoisture)
+            store.commit('SUMMARY_CHANGE', this.summary)
+            // this.info = this.timer
+          }
+          )
         }
-        )
         // this.statsCards[0]['value'] = this.count
         // console.log('Count = ', this.count)
         // console.log(this.timer)
