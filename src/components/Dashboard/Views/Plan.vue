@@ -1,4 +1,5 @@
 <template>
+<form>
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -9,6 +10,12 @@
           <form method="get" action="/" class="form-horizontal">
           <legend>Create a plan</legend>
             <fieldset>
+              <div class="form-group" >
+                <label class="col-sm-2 control-label">Plan Name</label>
+                <div class="col-sm-10">
+                  <input type="text" placeholder="Plan Name" class="form-control" v-model='planname'>
+                </div>
+              </div>
               <div class="form-group" v-for="info in infoDatas" >
                 <label class="col-sm-2 control-label">{{info.title}}</label>
                 <div class="col-sm-10">
@@ -19,7 +26,9 @@
           </form>
         </div>
         <center>
-          <button type="submit" class="btn btn-fill btn-info">Create a plan</button>
+          <button class="btn btn-fill btn-danger">
+            <a @click='createPlan' style="color:white"> Create a plan </a>
+          </button>
           <hr>
         </center>
       </div>  <!-- end card -->
@@ -53,18 +62,19 @@
               <div class="form-group">
                 <label class="col-sm-3 control-label">Type</label>
                 <div class="col-sm-3">
-                  <p-radio label="1" v-model="type.dailyType">Light</p-radio>
-                  <p-radio label="2" v-model="type.dailyType">Water</p-radio>
+                  <p-radio label="light" v-model="type.dailyType">Light</p-radio>
+                  <p-radio label="water" v-model="type.dailyType">Water</p-radio>
                 </div>
               </div>
             </fieldset>
 
             <fieldset>
               <div class="form-group">
-                <label class="col-sm-3 control-label">Level</label>
+                <label class="col-sm-3 control-label">Duration</label>
                 <div class="col-sm-4">
-                  <input type="int" placeholder="enter value" value="0" class="form-control"/>
+                  <input type="int" placeholder="enter value" value="0" class="form-control" v-model='duration.dailyDuration'/>
                 </div>
+                <label class="col-sm-1 control-label">Seconds</label>
               </div>
             </fieldset>
           </form>
@@ -102,8 +112,8 @@
                 <div class="form-group">
                   <label class="col-sm-3 control-label">Type</label>
                   <div class="col-sm-3">
-                    <p-radio label="1" v-model="type.weeklyType">Light</p-radio>
-                    <p-radio label="2" v-model="type.weeklyType">Water</p-radio>
+                    <p-radio label="light" v-model="type.weeklyType">Light</p-radio>
+                    <p-radio label="water" v-model="type.weeklyType">Water</p-radio>
                   </div>
                 </div>
               </fieldset>
@@ -131,10 +141,11 @@
 
             <fieldset>
               <div class="form-group">
-                <label class="col-sm-3 control-label">Level</label>
+                <label class="col-sm-3 control-label">Duration</label>
                 <div class="col-sm-5">
-                  <input type="int" placeholder="enter value" value="0" class="form-control"/>
+                  <input type="int" placeholder="enter value" value="0" class="form-control" v-model='duration.weeklyDuration'/>
                 </div>
+                <label class="col-sm-1 control-label">Seconds</label>
               </div>
             </fieldset>
           </form>
@@ -172,8 +183,8 @@
                 <div class="form-group">
                   <label class="col-sm-3 control-label">Type</label>
                   <div class="col-sm-3">
-                    <p-radio label="1" v-model="type.monthlyType">Light</p-radio>
-                    <p-radio label="2" v-model="type.monthlyType">Water</p-radio>
+                    <p-radio label="light" v-model="type.monthlyType">Light</p-radio>
+                    <p-radio label="water" v-model="type.monthlyType">Water</p-radio>
                   </div>
                 </div>
               </fieldset>
@@ -201,10 +212,11 @@
 
             <fieldset>
               <div class="form-group">
-                <label class="col-sm-3 control-label">Level</label>
+                <label class="col-sm-3 control-label">Duration</label>
                 <div class="col-sm-5">
-                  <input type="int" placeholder="enter value" value="0" class="form-control"/>
+                  <input type="int" placeholder="enter value" value="0" class="form-control" v-model='duration.monthlyDuration'/>
                 </div>
+                <label class="col-sm-1 control-label">Seconds</label>
               </div>
             </fieldset>
           </form>
@@ -215,10 +227,14 @@
 
 
   </div>
+</form>  
 </template>
 <script>
   import {TimeSelect} from 'element-ui'
+  import store from 'src/vuex/store'
+  import axios from 'axios'
   export default {
+    store,
     components: {
       [TimeSelect.name]: TimeSelect
     },
@@ -226,39 +242,98 @@
       return {
         infoDatas: [
           {
-            title: 'Name',
-            value: '0'
-          },
-          {
             title: 'Light',
-            value: '0'
+            value: store.state.lightvalue
           },
           {
             title: 'Humidity',
-            value: '0'
+            value: store.state.humidityvalue
           },
           {
             title: 'Temperature',
-            value: '0'
+            value: store.state.temperaturevalue
           },
           {
-            title: 'Soil Condition',
-            value: '0'
+            title: 'Soil moisture',
+            value: store.state.soilmoisturevalue
           }
         ],
         time: {
-          dailyTime: '',
-          weekyTime: '',
-          monthlyTime: ''
+          dailyTime: null,
+          weekyTime: null,
+          monthlyTime: null
         },
         type: {
-          dailyType: '1',
-          weeklyType: '1',
-          monthlyType: '1'
+          dailyType: 'light',
+          weeklyType: 'light',
+          monthlyType: 'light'
         },
         day: {
           weeklyDay: '1',
           monthlyDay: '1'
+        },
+        duration: {
+          dailyDuration: null,
+          weeklyDuration: null,
+          monthlyDuration: null
+        },
+        session: store.state.session,
+        planname: null,
+        response: null
+      }
+    },
+    methods: {
+      createPlan () {
+        if (this.time.dailyTime === null || this.time.weeklyTime === null || this.time.monthlyTime === null || this.duration.dailyDuration === null || this.duration.weeklyDuration === null || this.duration.monthlyDuration === null || this.planname === null) {
+          alert('Some information is missing please check')
+        } else {
+          let payload = {
+            'name': this.planname,
+            'desc': 'Beautiful flower',
+            'light_state': Number(store.state.lightvalue),
+            'humidity_state': Number(store.state.humidityvalue),
+            'temp_state': Number(store.state.temperaturevalue),
+            'moisture_state': Number(store.state.soilmoisturevalue),
+            'daily': [
+              {
+                'daily_time': this.time.dailyTime,
+                'action': {
+                  'type': this.type.dailyType,
+                  'level': 0,
+                  'duration': Number(this.duration.dailyDuration)
+                }
+              }
+            ],
+            'weekly': [
+              {
+                'weekly_time': this.day.weeklyDay + ':' + this.time.weeklyTime,
+                'action': {
+                  'type': this.type.weeklyType,
+                  'level': 0,
+                  'duration': Number(this.duration.weeklyDuration)
+                }
+              }
+            ],
+            'monthly': [
+              {
+                'monthly_time': this.day.monthlyDay + ':' + this.time.monthlyTime,
+                'action': {
+                  'type': this.type.monthlyType,
+                  'level': 0,
+                  'duration': Number(this.duration.monthlyDuration)
+                }
+              }
+            ]
+          }
+          console.log(payload)
+          axios.post('http://34.87.108.195/api/v1/plan', payload, {headers: {'session': this.session}}).then(
+            res => {
+              this.response = res.data
+              alert('Successfully create new plan\nRedirect to dashboard')
+              this.$router.push('/admin/overview')
+            }
+          )
+          // console.log(payload)
         }
       }
     }
