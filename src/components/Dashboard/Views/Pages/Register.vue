@@ -88,7 +88,6 @@
                           <a @click='createAccount'>Create Account</a>
                         </router-link>
                       </button>
-                      <button type="button" class="btn btn-fill btn-danger btn-wd">Create Accountaa</button>
                     </div>
                   </div>
                 </form>
