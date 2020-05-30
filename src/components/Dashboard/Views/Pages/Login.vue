@@ -19,8 +19,8 @@
             <router-link to="/register" tag="li">
               <a>Register</a>
             </router-link>
-            <router-link to="/admin/overview" tag="li">
-              <a>Dashboard</a>
+            <router-link to='' tag="li">
+              <a @click='checkLogin'>Dashboard</a>
             </router-link>
           </ul>
         </div>
@@ -52,9 +52,7 @@
                     </div>
                     <div class="card-footer text-center">
                       <button class="btn btn-fill btn-wd ">
-                        <router-link to="/admin/overview">
-                          <a @click='login'>Login</a>
-                        </router-link>
+                        <a @click='login'>Login</a>
                       </button>
                       <div class="forgot">
                         <router-link to="/register">
@@ -101,26 +99,38 @@
       return {
         username: null,
         password: null,
-        info: {}
+        info: {},
+        loginstate: store.state.login
       }
     },
     store,
     methods: {
+      checkLogin () {
+        if (this.loginstate) { this.$router.push('/admin/overview') } else { alert('Please Login or Register before enter the dashboard') }
+      },
       login () {
-        let payload = {
-          'name': this.username,
-          'password': this.password
-        }
-        return axios.post('http://34.87.108.195/api/v1/session', payload).then(
-          res => {
-            this.info = res.data
-            console.log(this.info)
-            store.commit('SESSION_CHANGE', this.info['session'])
-            store.commit('USERID_CHANGE', this.info['user_id'])
-            store.commit('NAME_CHANGE', this.info['user'])
-            store.commit('CONTROLLERID_CHANGE', this.info)
+        if (this.username === null || this.password === null) {
+          alert('Please enter username and password')
+          // this.$router.push('#')
+        } else {
+          let payload = {
+            'name': this.username,
+            'password': this.password
           }
-        )
+          store.commit('NAME_CHANGE', this.username)
+          store.commit('PASSWORD_CHANGE', this.password)
+          return axios.post('http://34.87.108.195/api/v1/session', payload).then(
+            res => {
+              this.info = res.data
+              store.commit('SESSION_CHANGE', this.info['session'])
+              store.commit('USERID_CHANGE', this.info['user_id'])
+              store.commit('NAME_CHANGE', this.info['user'])
+              store.commit('CONTROLLERID_CHANGE', this.info)
+              store.commit('LOGIN_CHANGE', true)
+              this.$router.push('/admin/overview')
+            }
+          )
+        }
       },
       toggleNavbar () {
         document.body.classList.toggle('nav-open')
