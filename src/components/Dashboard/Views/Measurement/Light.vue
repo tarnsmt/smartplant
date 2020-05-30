@@ -30,6 +30,8 @@
       return {
         lightvalue: store.state.lightvalue
       }
+    },
+    created () {
     }
   }
 
