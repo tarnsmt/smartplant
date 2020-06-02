@@ -90,7 +90,7 @@
   import Vue from 'vue'
   import axios from 'axios'
   import {Collapse, CollapseItem} from 'element-ui'
-  import r from 'rethinkdb'
+  // import r from 'rethinkdb'
   // import rethinkdb from 'rethinkdb'
   import CircleChartCard from 'src/components/UIComponents/Cards/CircleChartCard.vue'
   import StatsCard from 'src/components/UIComponents/Cards/StatsCard.vue'
