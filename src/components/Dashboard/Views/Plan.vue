@@ -326,7 +326,7 @@
             ]
           }
           console.log(payload)
-          axios.post('http://34.87.108.195/api/v1/plan', payload, {headers: {'session': this.session}}).then(
+          axios.put('http://34.87.108.195/api/v1/plan/adbc08e4-bfaf-49d6-acc1-b91e661d9099', payload, {headers: {'session': this.session}}).then(
             res => {
               this.response = res.data
               alert('Successfully create new plan\nRedirect to dashboard')
