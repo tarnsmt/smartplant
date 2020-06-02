@@ -23,7 +23,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import r from 'rethinkdb'
+  // import r from 'rethinkdb'
   // import rethinkdb from 'rethinkdb'
   import CircleChartCard from 'src/components/UIComponents/Cards/CircleChartCard.vue'
   import StatsCard from 'src/components/UIComponents/Cards/StatsCard.vue'
@@ -31,6 +31,9 @@
   import store from 'src/vuex/store'
   // var r = null
   // var connection = null
+  var RethinkdbWebsocketClient = require('rethinkdb-websocket-client')
+  var r = RethinkdbWebsocketClient.rethinkdb
+  // var Promise = RethinkdbWebsocketClient.Promise
 
   export default {
     components: {
@@ -246,11 +249,37 @@
         })
         r.table('sensor').run().then(response => { console.log(response) })
         */
+        let options = {
+          host: '35.240.205.254',
+          port: 28015,
+          db: 'production',
+          path: '/',               // HTTP path to websocket route
+          wsProtocols: ['binary'], // sub-protocols for websocket, required for websockify
+          wsBinary: 'arraybuffer',  // specify which binary type should be used for WS (optional)
+          secure: false
+        }
+        RethinkdbWebsocketClient.connect(options).then(function (conn) {
+          var query = r.table('sensor')
+          query.run(conn, function (err, cursor) {
+            if (err) {
+              console.log(err)
+            }
+            cursor.toArray(function (err, results) {
+              if (err) {
+                console.log(err)
+              } else {
+                console.log(results)
+              }
+            })
+          })
+        })
+        /*
         r.connect({ host: '35.240.205.254', port: 28015, db: 'production' }, (err, conn) => {
           if (err) { console.log(err + 'Hello') } else { console.log('Connected successfully') }
         })
         r.db('production').table('sensor')
         r.table('sensor').run().then(response => { console.log(response) })
+        */
       }
     },
     beforeDestroy () {
