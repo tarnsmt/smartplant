@@ -10,20 +10,87 @@
           </div>
           <div class="numbers" slot="content" >
             <p>{{stats.title}}</p>
-            <p style="font-size: 19px; padding-left: 0px">{{stats.value}}</p>
+            <p style="font-size: 19px;">{{stats.value}}</p>
           </div>
           <div class="stats" slot="footer" v-bind:style="stats.styleIcon">
             <i :class="stats.footerIcon"></i> {{stats.footerText}}
           </div>
         </stats-card>
       </div>
+
+    <div class="col-lg-6 col-sm-6">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">User guideline</h4>
+          <p class="category">Growing plants takes time and significant resources, it is also tedious to manually water and monitor the environment for the plants. Let us take care your plant. </p>
+        </div>
+        <div class="card-content">
+          <el-collapse>
+            <el-collapse-item title="About AutoPlant" name="1">
+              <div>
+                Different plants have different requirements. For example, a cactus and a sanchezia are polar opposite of each other, one requires little water while the others thrive on it. The software aims to take care of the tedious bits to growing plants by letting users define the plan they want for the plants.
+              </div>
+            </el-collapse-item>
+            <el-collapse-item title="Sensors" name="2">
+              <div>
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+              </div>
+            </el-collapse-item>
+            <el-collapse-item title="How to use" name="3">
+              <div>
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+              </div>
+            </el-collapse-item>
+          </el-collapse>
+          <br>
+          <br>
+        </div>
+      </div>
     </div>
 
+    <div class="col-lg-6 col-sm-6">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Temperature</h4>
+          <p class="category">6 day Extended Forecast</p>
+        </div>
+        <div class="card-content">
+          <div id="chartViews" class="ct-chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-sm-6">
+      <chart-card :chart-data="usersChart.data" :chart-options="usersChart.options">
+        <div slot="header">
+          <h4 class="card-title">Humidity</h4>
+          <p class="category">6 hours forecast</p>
+        </div>
+
+        <div class="stats" slot="footer-title">
+          <i class="ti-reload"></i> Updated now
+        </div>
+        <div slot="footer">
+          <div class="chart-legend">
+            <i class="fa fa-circle text-info"></i> Raining Chance
+            <i class="fa fa-circle text-warning"></i> Humidity
+          </div>
+          <hr>
+          <div class="stats">
+            <i class="ti-reload"></i> Updated now
+          </div>
+        </div>
+      </chart-card>
+    </div>
+
+    </div>
   </div>
 </template>
 <script>
+  import Vue from 'vue'
   import axios from 'axios'
-  // import r from 'rethinkdb'
+  import {Collapse, CollapseItem} from 'element-ui'
+  import r from 'rethinkdb'
   // import rethinkdb from 'rethinkdb'
   import CircleChartCard from 'src/components/UIComponents/Cards/CircleChartCard.vue'
   import StatsCard from 'src/components/UIComponents/Cards/StatsCard.vue'
@@ -35,6 +102,9 @@
   var r = RethinkdbWebsocketClient.rethinkdb
   // var Promise = RethinkdbWebsocketClient.Promise
 
+  Vue.use(Collapse)
+  Vue.use(CollapseItem)
+
   export default {
     components: {
       StatsCard,
@@ -44,6 +114,7 @@
     store,
     data () {
       return {
+        $Chartist: null,
         statsCards: [
           {
             styleObject: {
@@ -102,30 +173,39 @@
             footerIcon: 'ti-timer'
           }
         ],
-        earningsChart: {
+        usersChart: {
           data: {
-            labels: ['Jan', 'Feb', 'Mar', 'April', 'May', 'June'],
+            labels: [
+              this.getNow(0),
+              this.getNow(1),
+              this.getNow(2),
+              this.getNow(3),
+              this.getNow(4),
+              this.getNow(5),
+              this.getNow(6),
+              this.getNow(7)
+            ],
             series: [
-              [230, 340, 400, 300, 570, 500, 800]
-            ]
+              [58, 60, 54, 64, 64, 63, 57, 68, 65],
+              [43, 43, 45, 45, 56, 44, 34, 34, 54]
+            ],
+            timestamp: ''
           },
           options: {
-            showPoint: false,
-            lineSmooth: true,
-            height: '210px',
+            low: 0,
+            high: 90,
+            showArea: true,
+            height: '245px',
             axisX: {
-              showGrid: false,
-              showLabel: true
-            },
-            axisY: {
-              offset: 40,
               showGrid: false
             },
-            low: 0,
-            high: 'auto',
-            classNames: {
-              line: 'ct-line ct-green'
-            }
+            axisY: {
+              labelInterpolationFnc (value) {
+                return `${value} %`
+              }
+            },
+            showLine: true,
+            showPoint: false
           }
         },
         info: {},
@@ -201,6 +281,55 @@
       )
     },
     methods: {
+      initViewsChart () {
+        const dataViews = {
+          labels: ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'],
+          series: [
+            [35, 32, 36, 37, 30, 32, 37],
+            [27, 25, 22, 25, 25, 26, 28]
+          ]
+        }
+        const optionsViews = {
+          seriesBarDistance: 10,
+          axisX: {
+            showGrid: false
+          },
+          axisY: {
+            labelInterpolationFnc (value) {
+              return `${value}°C`
+            }
+          },
+          height: '250px',
+          low: 20,
+          high: 50
+        }
+        const responsiveOptionsViews = [
+          ['screen and (max-width: 640px)', {
+            seriesBarDistance: 10,
+            axisX: {
+              labelInterpolationFnc (value) {
+                return value[0]
+              }
+            }
+          }]
+        ]
+        this.$Chartist.Bar('#chartViews', dataViews, optionsViews, responsiveOptionsViews)
+      },
+      initCharts () {
+        this.initViewsChart()
+      },
+      getNow: function (num) {
+        var hr = new Date().getHours() + Number(num)
+        var mid = 'AM'
+        if (hr === 0) {
+          hr = 12
+        } else if (hr > 12) {
+          hr = hr % 12
+          mid = 'PM'
+        }
+        this.timestamp = hr + mid
+        return this.timestamp
+      },
       fetchData () {
         if (this.login) {
           axios.get('http://34.87.108.195/api/v1/summary/ea60c35b-79d1-49b1-9b55-86554f8c4afa', {headers: {'session': this.session}}).then(
@@ -281,6 +410,11 @@
         r.table('sensor').run().then(response => { console.log(response) })
         */
       }
+    },
+    async mounted () {
+      const Chartist = await import('chartist')
+      this.$Chartist = Chartist
+      this.initCharts()
     },
     beforeDestroy () {
       clearInterval(this.timer)

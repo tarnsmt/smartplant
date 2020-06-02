@@ -33,8 +33,8 @@
             <div class="row">
               <div class="col-md-8 col-md-offset-2">
                 <div class="header-text">
-                  <h2>Smart Plant</h2>
-                  <h4>Use SmartPlant completely free for your first taste of simple plant care.</h4>
+                  <h2>AutoPlant</h2>
+                  <h4>Use AutoPlant completely free for your first taste of simple plant care.</h4>
                   <hr>
                 </div>
               </div>

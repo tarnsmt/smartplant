@@ -33,7 +33,7 @@
     props: {
       title: {
         type: String,
-        default: 'SMART PLANT'
+        default: 'AUTO PLANT'
       },
       type: {
         type: String,

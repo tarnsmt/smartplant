@@ -11,9 +11,9 @@
           <legend>Create a plan</legend>
             <fieldset>
               <div class="form-group" >
-                <label class="col-sm-2 control-label">Plan Name</label>
-                <div class="col-sm-10">
-                  <input type="text" placeholder="Plan Name" class="form-control" v-model='planname'>
+                <label class="col-sm-2 control-label">Plant Name</label>
+                <div class="col-sm-3">
+                  <input type="text" placeholder="Plant Name" class="form-control" v-model='planname'>
                 </div>
               </div>
               <div class="form-group" v-for="info in infoDatas" >
@@ -71,7 +71,7 @@
             <fieldset>
               <div class="form-group">
                 <label class="col-sm-3 control-label">Duration</label>
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                   <input type="int" placeholder="enter value" value="0" class="form-control" v-model='duration.dailyDuration'/>
                 </div>
                 <label class="col-sm-1 control-label">Seconds</label>
