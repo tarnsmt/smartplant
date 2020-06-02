@@ -24,6 +24,7 @@
     "net": "^1.0.2",
     "perfect-scrollbar": "0.7.1",
     "rethinkdb": "^2.4.2",
+    "rethinkdb-websocket-client": "^0.6.0",
     "rethinkdbdash": "^2.3.31",
     "sweetalert2": "^6.11.4",
     "tls": "0.0.1",
