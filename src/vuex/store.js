@@ -19,7 +19,8 @@ const state = {
   waterlevelvalue: '',
   soilmoisturevalue: '',
   summary: {},
-  login: false
+  login: false,
+  chart_info: []
 }
 
 // Create an object storing various mutations. We will write the mutation
@@ -60,6 +61,9 @@ const mutations = {
   },
   LOGIN_CHANGE: (state, value) => {
     state.login = value
+  },
+  CHARTINFO_CHANGE: (state, value) => {
+    state.chart_info = value
   }
 }
 
@@ -75,7 +79,8 @@ const getters = {
   waterlevelvalue: state => state.waterlevelvalue,
   soilmoisturevalue: state => state.soilmoisturevalue,
   summary: state => state.summary,
-  login: state => state.login
+  login: state => state.login,
+  chart_info: state => state.chart_info
 }
 
 const actions = {
@@ -114,6 +119,9 @@ const actions = {
   },
   saveLogin: (state, value) => {
     store.commit('LOGIN_CHANGE', value)
+  },
+  saveChartInfo: (state, value) => {
+    store.commit('CHARTINFO_CHANGE', value)
   }
 }
 
