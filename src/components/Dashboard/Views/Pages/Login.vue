@@ -127,9 +127,14 @@
           if (this.validate === 'credentials not match or user does not exist') {
             alert('Wrong username or password\nPlease re-enter again')
           } else {
+            await axios.get('https://api.openweathermap.org/data/2.5/forecast?q=Bangkok&appid=e5f182d43d4937602e0e6797b0ec068f').then(
+              res => {
+                store.commit('CHARTINFO_CHANGE', res.data['list'])
+              }
+            )
             store.commit('NAME_CHANGE', this.username)
             store.commit('PASSWORD_CHANGE', this.password)
-            return axios.post('http://34.87.108.195/api/v1/session', payload).then(
+            await axios.post('http://34.87.108.195/api/v1/session', payload).then(
               res => {
                 this.info = res.data
                 store.commit('SESSION_CHANGE', this.info['session'])
