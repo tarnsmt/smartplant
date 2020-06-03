@@ -4,36 +4,38 @@
       <div class="col-md-6">
         <time-line type="simple">
 
-          <time-line-item class="timeline-inverted" badge-type="primary">
-            <span slot="header" class="label label-primary">Soil Moisture</span>
-            <p slot="body"><b>1000</b> : the air is saturated at that temperature and can not hold more</p>
-            <p slot="body"><b>500 </b>: the air carries 50% of the humidity that would saturate the air</p>
-            <p slot="body"><b>0 </b>: zero water content </p>
+          <time-line-item class="timeline-inverted" badge-type="warning">
+            <span slot="header" class="label label-danger">Soil moisture</span>
+            <p slot="body"><b>0-20 %</b> : Extremely dry soil</p>
+            <p slot="body"><b>21-40 %</b> : Well drained soil</p>
+            <p slot="body"><b>41-60 %</b> : Moist soil</p>
+            <p slot="body"><b>61-80 %</b> : Wet soil</p>
+            <p slot="body">** 20%-60% is most suitable for most general plants **</p>
           </time-line-item>
 
-          <time-line-item class="timeline-inverted" badge-type="warning">
-            <span slot="header" class="label label-warning">Water level</span>
-            <div slot="body">
-              <p>Levels between 300 and 600 are considered optimum for most plants.</p>
-            </div>
+          <time-line-item class="timeline-inverted" badge-type="primary">
+            <span slot="header" class="label label-info">Water container</span>
+            <p slot="body"><b>61-100 %</b> : High</p>
+            <p slot="body"><b>31-60 %</b> : Medium</p>
+            <p slot="body"><b>&lt30 %</b> : Low (Need to refill)</p>
           </time-line-item>
 
         </time-line>
       </div>
       <!-- end data info -->
       <div class="col-lg-3 col-sm-6">
-        <circle-number-chart-card :number="soilmoisturevalue"
+        <circle-chart-card :percentage="realtimesoilmois"
                            title="Plant"
                            description="Soil Moisture"
                            color="orange">
-        </circle-number-chart-card>
+        </circle-chart-card>
       </div>
       <div class="col-lg-3 col-sm-6">
-        <circle-number-chart-card :number="waterlevelvalue"
+        <circle-chart-card :percentage="waterlevelvalue"
                            title="Water Container"
                            description="Water Level"
                            color="blue">
-        </circle-number-chart-card>
+        </circle-chart-card>
       </div>
     </div>
   </div>
@@ -42,6 +44,7 @@
   import TimeLine from './InfoData/TimeLine.vue'
   import TimeLineItem from './InfoData/TimeLineItem.vue'
   import CircleNumberChartCard from 'src/components/UIComponents/Cards/NumberCard.vue'
+  import CircleChartCard from 'src/components/UIComponents/Cards/CircleChartCard.vue'
   import ChartCard from 'src/components/UIComponents/Cards/ChartCard.vue'
   import store from 'src/vuex/store'
   import Vuex from 'vuex'
@@ -53,12 +56,36 @@
       TimeLine,
       TimeLineItem,
       ChartCard,
-      CircleNumberChartCard
+      CircleNumberChartCard,
+      CircleChartCard
     },
     data () {
       return {
         waterlevelvalue: store.state.waterlevelvalue,
-        soilmoisturevalue: store.state.soilmoisturevalue
+        soilmoisturevalue: store.state.soilmoisturevalue,
+        realtimesoilmois: store.state.soilmoisturevalue
+      }
+    },
+    created () {
+      if (Number(this.waterlevelvalue) <= 300) {
+        this.waterlevelvalue = 100
+      } else if (Number(this.waterlevelvalue) <= 600) {
+        this.waterlevelvalue = 60
+      } else if (Number(this.waterlevelvalue) <= 1000) {
+        this.waterlevelvalue = 25
+      }
+      this.refreshsoilmois()
+      setInterval(this.refreshsoilmois, 10000)
+    },
+    methods: {
+      refreshsoilmois () {
+        var t = Math.floor(Math.random() * 10) + 1
+        var r = Math.floor(Math.random() * 2)
+        if (r === 0) {
+          this.realtimesoilmois = (this.soilmoisturevalue + t).toFixed(1)
+        } else {
+          this.realtimesoilmois = (this.soilmoisturevalue - t).toFixed(1)
+        }
       }
     }
   }

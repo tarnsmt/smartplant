@@ -11,11 +11,15 @@
           </time-line-item>
 
           <time-line-item class="timeline-inverted" badge-type="success">
-            <span slot="header" class="label label-success">breakdown of the lighting needs of each type of houseplant</span>
+            <span slot="header" class="label label-success">breakdown of the lighting intensity needs of each type of plants</span>
             <div slot="body">
-              <p><b>Low light plants</b> : Lux 500-2500</p>
-              <p><b>Medium light plants</b> : Lux 2500-10000</p>
-              <p><b>Bright light plants</b> : Lux 10000-20000</p>
+              <p><b>Very low light </b> : Lux 200-500 : Not appropriate for most plants.</p>
+              <p><b>Low light </b> : Lux 500-1000 : This light intensity is appropriate for shade-loving plants.</p>
+              <p><b>Indirect light </b> : Lux 1000-2000 :  Appropriate for plants that require indirect sunlight.</p>
+              <p><b>Direct light</b> : Lux 2000-4000 :  It is ideal for most plants.</p>
+              <p><b>Strong light</b> : Lux 4000-5000 : Appropriate for plants that require a lot of strong light.</p>
+              <p><b>Very strong light</b> : Lux >5000 : Very bright indoor light, not as strong as outdoors.</p>
+              <p><b>Outdoor sun light</b> : Lux >10000</p>
             </div>
           </time-line-item>
 
@@ -24,7 +28,7 @@
       <!-- end data info -->
 
       <div class="col-lg-3 col-sm-6">
-        <circle-number-chart-card :number="lightvalue"
+        <circle-number-chart-card :number="realtimelight"
                            title="Plant"
                            description="Light Intensity"
                            color="brown">
@@ -55,10 +59,24 @@
     },
     data () {
       return {
-        lightvalue: store.state.lightvalue
+        lightvalue: store.state.lightvalue,
+        realtimelight: store.state.lightvalue
       }
     },
     created () {
+      this.refresh()
+      setInterval(this.refresh, 10000)
+    },
+    methods: {
+      refresh () {
+        var t = Math.floor(Math.random() * 100) + 1
+        var r = Math.floor(Math.random() * 2)
+        if (r === 0) {
+          this.realtimelight = this.lightvalue + t
+        } else {
+          this.realtimelight = this.lightvalue - t
+        }
+      }
     }
   }
 
