@@ -52,10 +52,12 @@
       <div class="card">
         <div class="card-header">
           <h4 class="card-title">Temperature</h4>
-          <p class="category">6 day Extended Forecast</p>
+          <p class="category">5 day Extended Forecast</p>
         </div>
         <div class="card-content">
           <div id="chartViews" class="ct-chart"></div>
+          <i class="fa fa-circle text-info"></i> Temperature
+          <i class="fa fa-circle text-warning"></i> Feels like
         </div>
       </div>
     </div>
@@ -64,7 +66,7 @@
       <chart-card :chart-data="usersChart.data" :chart-options="usersChart.options">
         <div slot="header">
           <h4 class="card-title">Humidity</h4>
-          <p class="category">6 hours forecast</p>
+          <p class="category">24 hours forecast</p>
         </div>
 
         <div class="stats" slot="footer-title">
@@ -72,12 +74,8 @@
         </div>
         <div slot="footer">
           <div class="chart-legend">
-            <i class="fa fa-circle text-info"></i> Raining Chance
+            <i class="fa fa-circle text-info"></i> Cloudiness
             <i class="fa fa-circle text-warning"></i> Humidity
-          </div>
-          <hr>
-          <div class="stats">
-            <i class="ti-reload"></i> Updated now
           </div>
         </div>
       </chart-card>
@@ -176,24 +174,25 @@
         usersChart: {
           data: {
             labels: [
-              this.getNow(0),
-              this.getNow(1),
-              this.getNow(2),
               this.getNow(3),
-              this.getNow(4),
-              this.getNow(5),
               this.getNow(6),
-              this.getNow(7)
+              this.getNow(9),
+              this.getNow(12),
+              this.getNow(15),
+              this.getNow(18),
+              this.getNow(21),
+              this.getNow(24),
+              this.getNow(27)
             ],
             series: [
-              [58, 60, 54, 64, 64, 63, 57, 68, 65],
-              [43, 43, 45, 45, 56, 44, 34, 34, 54]
+              [10, 10, 10, 10, 10, 10, 10, 10, 10],
+              [10, 10, 10, 10, 10, 10, 10, 10, 10]
             ],
             timestamp: ''
           },
           options: {
-            low: 0,
-            high: 90,
+            low: 10,
+            high: 100,
             showArea: true,
             height: '245px',
             axisX: {
@@ -201,7 +200,7 @@
             },
             axisY: {
               labelInterpolationFnc (value) {
-                return `${value} %`
+                return `${value}%`
               }
             },
             showLine: true,
@@ -230,43 +229,43 @@
         soilmoisture: null,
         location: null,
         summary: null,
-        temp: null
+        temp: null,
+        chart_info: store.state.chart_info,
+        lowesthumiditypos: store.state.lowesthumiditypos
       }
     },
-    created () {
-      // var r = require('rethinkdb')
-      /*
-      connection = r.connect({ host: '35.240.205.254', port: 28015, db: 'production' }, function (err, conn) {
-        if (err) throw err
-        connection = conn
-        console.log(conn)
-      })
-      */
-      // this.conre()
-      // console.log(r)
+    async created () {
+      this.usersChart['data']['series'] =
+      [[Number(this.chart_info[0]['clouds']['all']),
+        Number(this.chart_info[1]['clouds']['all']),
+        Number(this.chart_info[2]['clouds']['all']),
+        Number(this.chart_info[3]['clouds']['all']),
+        Number(this.chart_info[4]['clouds']['all']),
+        Number(this.chart_info[5]['clouds']['all']),
+        Number(this.chart_info[6]['clouds']['all']),
+        Number(this.chart_info[7]['clouds']['all']),
+        Number(this.chart_info[8]['clouds']['all']),
+        Number(this.chart_info[9]['clouds']['all'])],
+      [Number(this.chart_info[0]['main']['humidity']),
+        Number(this.chart_info[1]['main']['humidity']),
+        Number(this.chart_info[2]['main']['humidity']),
+        Number(this.chart_info[3]['main']['humidity']),
+        Number(this.chart_info[4]['main']['humidity']),
+        Number(this.chart_info[5]['main']['humidity']),
+        Number(this.chart_info[6]['main']['humidity']),
+        Number(this.chart_info[7]['main']['humidity']),
+        Number(this.chart_info[8]['main']['humidity']),
+        Number(this.chart_info[9]['main']['humidity'])]]
       this.fetchData()
-      // this.rethink()
-      this.timer = setInterval(this.fetchData, 5000)
-      /*
-      axios.get('http://34.87.108.195/api/v1/summary/acac4896-6458-45a8-a51d-781012ade0db', {headers: {'session': '91040f98-e558-488e-aaf8-69c5bc2d8cc7'}}).then(
-        res => {
-          this.info = res.data
-        },
-        console.log(this.info),
-        this.statsCards[0]['value'] = this.info.median_temperature,
-        this.statsCards[1]['value'] = this.info.median_humidity
-        // statsCards[2]['value'] = this.info.median_temperature,
-        // statsCards[3]['value'] = this.info.median_temperature
-      )
-      */
-      axios.get('https://api.openweathermap.org/data/2.5/uvi/forecast?appid=e5f182d43d4937602e0e6797b0ec068f&lat=13.75&lon=100.50').then(
+      setInterval(this.fetchData, 10000)
+      await axios.get('https://api.openweathermap.org/data/2.5/uvi/forecast?appid=e5f182d43d4937602e0e6797b0ec068f&lat=13.75&lon=100.50').then(
         res => {
           this.uv = res.data
           this.uv = this.uv[0]['value']
           this.statsCards[2]['value'] = this.uv
         }
       )
-      axios.get('https://api.openweathermap.org/data/2.5/weather?q=Bangkok&appid=e5f182d43d4937602e0e6797b0ec068f').then(
+      await axios.get('https://api.openweathermap.org/data/2.5/weather?q=Bangkok&appid=e5f182d43d4937602e0e6797b0ec068f').then(
         res => {
           this.information = res.data
           this.humidity = res.data
@@ -281,12 +280,28 @@
       )
     },
     methods: {
-      initViewsChart () {
+      async initViewsChart () {
+        var today = new Date()
+        var date1 = (today.getDate() + 1) + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()
+        var date2 = (today.getDate() + 2) + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()
+        var date3 = (today.getDate() + 3) + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()
+        var date4 = (today.getDate() + 4) + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()
+        var date5 = (today.getDate() + 5) + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()
+        var temp = Number(Number(this.chart_info[4]['main']['temp_max']) / 10).toFixed(2)
+        console.log(temp)
         const dataViews = {
-          labels: ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'],
+          labels: [date1, date2, date3, date4, date5],
           series: [
-            [35, 32, 36, 37, 30, 32, 37],
-            [27, 25, 22, 25, 25, 26, 28]
+            [Number(Number(this.chart_info[3]['main']['temp']) / 10).toFixed(2),
+              Number(Number(this.chart_info[11]['main']['temp']) / 10).toFixed(2),
+              Number(Number(this.chart_info[19]['main']['temp']) / 10).toFixed(2),
+              Number(Number(this.chart_info[27]['main']['temp']) / 10).toFixed(2),
+              Number(Number(this.chart_info[35]['main']['temp']) / 10).toFixed(2)],
+            [Number(Number(this.chart_info[3]['main']['feels_like']) / 10).toFixed(2),
+              Number(Number(this.chart_info[11]['main']['feels_like']) / 10).toFixed(2),
+              Number(Number(this.chart_info[19]['main']['feels_like']) / 10).toFixed(2),
+              Number(Number(this.chart_info[27]['main']['feels_like']) / 10).toFixed(2),
+              Number(Number(this.chart_info[35]['main']['feels_like']) / 10).toFixed(2)]
           ]
         }
         const optionsViews = {
@@ -300,8 +315,8 @@
             }
           },
           height: '250px',
-          low: 20,
-          high: 50
+          low: (Number(Number(this.chart_info[19]['main']['temp']) / 10) - 3).toFixed(2),
+          high: (Number(Number(this.chart_info[19]['main']['temp']) / 10) + 2).toFixed(2)
         }
         const responsiveOptionsViews = [
           ['screen and (max-width: 640px)', {
@@ -319,7 +334,15 @@
         this.initViewsChart()
       },
       getNow: function (num) {
-        var hr = new Date().getHours() + Number(num)
+        var numm = 0
+        if (num === 24) {
+          numm = 0
+        } else if (num === 27) {
+          numm = 3
+        } else {
+          numm = num
+        }
+        var hr = new Date().getHours() + Number(numm)
         var mid = 'AM'
         if (hr === 0) {
           hr = 12
@@ -330,9 +353,9 @@
         this.timestamp = hr + mid
         return this.timestamp
       },
-      fetchData () {
+      async fetchData () {
         if (this.login) {
-          axios.get('http://34.87.108.195/api/v1/summary/ea60c35b-79d1-49b1-9b55-86554f8c4afa', {headers: {'session': this.session}}).then(
+          await axios.get('http://34.87.108.195/api/v1/summary/ea60c35b-79d1-49b1-9b55-86554f8c4afa', {headers: {'session': this.session}}).then(
           res => {
             this.info = res.data
             this.summary = res.data['summary_list']
@@ -341,20 +364,16 @@
             this.plantHumidity = this.info['median_humidity']
             this.plantLight = this.info['median_light']
             this.plantWaterLevel = this.info['median_water_level']
-            this.soilmoisture = this.info['median_soil_moisture']
+            this.soilmoisture = this.info['median_soil_moisture'] / 10
             store.commit('TEMP_CHANGE', this.plantTemp)
             store.commit('LIGHT_CHANGE', this.plantLight)
             store.commit('HUMIDITY_CHANGE', this.plantHumidity)
             store.commit('WATERLEVEL_CHANGE', this.plantWaterLevel)
             store.commit('SOILMOISTURE_CHANGE', this.soilmoisture)
             store.commit('SUMMARY_CHANGE', this.summary)
-            // this.info = this.timer
           }
           )
         }
-        // this.statsCards[0]['value'] = this.count
-        // console.log('Count = ', this.count)
-        // console.log(this.timer)
       },
       rethink () {
         r.table('sensor')
