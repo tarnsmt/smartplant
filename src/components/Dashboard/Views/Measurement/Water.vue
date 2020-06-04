@@ -24,7 +24,7 @@
       </div>
       <!-- end data info -->
       <div class="col-lg-3 col-sm-6">
-        <circle-chart-card :percentage="realtimesoilmois"
+        <circle-chart-card :percentage=Number(realtimesoilmois)
                            title="Plant"
                            description="Soil Moisture"
                            color="orange">
