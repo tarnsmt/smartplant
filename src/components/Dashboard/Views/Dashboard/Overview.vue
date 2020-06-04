@@ -38,7 +38,7 @@
             </el-collapse-item>
             <el-collapse-item title="How to use" name="3">
               <div>
-                Users are able to get the information and create a plan for water sensor based on daily, weekly, monthly. 
+                Users are able to get the information and create a plan for water sensor based on daily, weekly, monthly. The sumamary table is also provided for users each day to see the sensor information.
               </div>
             </el-collapse-item>
           </el-collapse>
