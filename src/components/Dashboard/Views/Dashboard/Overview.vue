@@ -88,17 +88,10 @@
   import Vue from 'vue'
   import axios from 'axios'
   import {Collapse, CollapseItem} from 'element-ui'
-  // import r from 'rethinkdb'
-  // import rethinkdb from 'rethinkdb'
   import CircleChartCard from 'src/components/UIComponents/Cards/CircleChartCard.vue'
   import StatsCard from 'src/components/UIComponents/Cards/StatsCard.vue'
   import ChartCard from 'src/components/UIComponents/Cards/ChartCard.vue'
   import store from 'src/vuex/store'
-  // var r = null
-  // var connection = null
-  var RethinkdbWebsocketClient = require('rethinkdb-websocket-client')
-  var r = RethinkdbWebsocketClient.rethinkdb
-  // var Promise = RethinkdbWebsocketClient.Promise
 
   Vue.use(Collapse)
   Vue.use(CollapseItem)
@@ -287,8 +280,6 @@
         var date3 = (today.getDate() + 3) + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()
         var date4 = (today.getDate() + 4) + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()
         var date5 = (today.getDate() + 5) + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()
-        var temp = Number(Number(this.chart_info[4]['main']['temp_max']) / 10).toFixed(2)
-        console.log(temp)
         const dataViews = {
           labels: [date1, date2, date3, date4, date5],
           series: [
@@ -374,60 +365,6 @@
           }
           )
         }
-      },
-      rethink () {
-        r.table('sensor')
-        .run()
-        .then(function (response) {
-          console.log(response)
-        })
-        .error(function (err) {
-          console.log(err)
-        })
-      },
-      conre () {
-        /*
-        r = require('rethinkdbdash')({
-          host: '35.240.205.254',
-          port: 28015,
-          db: 'production'
-        })
-        r.getPoolMaster().on('healthy', function (healthy) {
-          if (healthy === true) { console.log('We can run queries.') } else { console.log('No queries can be run.') }
-        })
-        r.table('sensor').run().then(response => { console.log(response) })
-        */
-        let options = {
-          host: '35.240.205.254',
-          port: 28015,
-          db: 'production',
-          path: '/',               // HTTP path to websocket route
-          wsProtocols: ['binary'], // sub-protocols for websocket, required for websockify
-          wsBinary: 'arraybuffer',  // specify which binary type should be used for WS (optional)
-          secure: false
-        }
-        RethinkdbWebsocketClient.connect(options).then(function (conn) {
-          var query = r.table('sensor')
-          query.run(conn, function (err, cursor) {
-            if (err) {
-              console.log(err)
-            }
-            cursor.toArray(function (err, results) {
-              if (err) {
-                console.log(err)
-              } else {
-                console.log(results)
-              }
-            })
-          })
-        })
-        /*
-        r.connect({ host: '35.240.205.254', port: 28015, db: 'production' }, (err, conn) => {
-          if (err) { console.log(err + 'Hello') } else { console.log('Connected successfully') }
-        })
-        r.db('production').table('sensor')
-        r.table('sensor').run().then(response => { console.log(response) })
-        */
       }
     },
     async mounted () {
