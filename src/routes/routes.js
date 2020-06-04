@@ -59,7 +59,7 @@ const routes = [
   {
     path: '/',
     component: DashboardLayout,
-    redirect: '/login',
+    redirect: loginPage,
     children: [
       {
         path: 'calendar',
