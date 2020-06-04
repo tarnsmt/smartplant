@@ -10,7 +10,7 @@
             <p slot="body"><b>21-40 %</b> : Well drained soil</p>
             <p slot="body"><b>41-60 %</b> : Moist soil</p>
             <p slot="body"><b>61-80 %</b> : Wet soil</p>
-            <p slot="body">** 20%-60% is most suitable for most general plants **</p>
+            <p slot="body">** 20%-60% is suitable for most general plants **</p>
           </time-line-item>
 
           <time-line-item class="timeline-inverted" badge-type="primary">
