@@ -49,7 +49,7 @@
                     v-model="time.dailyTime"
                     :picker-options="{
                       start: '00:00',
-                      step: '00:15',
+                      step: '00:01',
                       end: '23:59'
                     }"
                     placeholder="Select time">
@@ -98,7 +98,7 @@
                     v-model="time.weeklyTime"
                     :picker-options="{
                       start: '00:00',
-                      step: '00:15',
+                      step: '00:01',
                       end: '23:59'
                     }"
                     placeholder="Select time">
@@ -169,7 +169,7 @@
                     v-model="time.monthlyTime"
                     :picker-options="{
                       start: '00:00',
-                      step: '00:15',
+                      step: '00:01',
                       end: '23:59'
                     }"
                     placeholder="Select time">
@@ -224,19 +224,93 @@
       </div>  <!-- end card -->
     </div> <!-- end col-md-4 -->
     <!-- end Weekly plan -->
-
+     <div class="col-sm-12">
+          <el-table class="table-striped"
+                    :data="queriedData"
+                    border
+                    style="width: 100%">
+            <el-table-column v-for="column in tableColumns"
+                             :key="column.label"
+                             :min-width="column.minWidth"
+                             :prop="column.prop"
+                             :label="column.label">
+            </el-table-column>
+          </el-table>
+        </div>
 
   </div>
 </form>  
 </template>
 <script>
-  import {TimeSelect} from 'element-ui'
+  import Vue from 'vue'
+  import {TimeSelect, Table, TableColumn, Select, Option} from 'element-ui'
   import store from 'src/vuex/store'
+  import PPagination from 'src/components/UIComponents/Pagination.vue'
   import axios from 'axios'
+  Vue.use(Table)
+  Vue.use(TableColumn)
+  Vue.use(Select)
+  Vue.use(Option)
   export default {
     store,
     components: {
-      [TimeSelect.name]: TimeSelect
+      [TimeSelect.name]: TimeSelect,
+      PPagination
+    },
+    created () {
+      var i
+      for (i = 0; i < this.plandata.length; i++) {
+        this.tableData.push({
+          'name': this.plandata[i]['name'],
+          'light_state': this.plandata[i]['light_state'],
+          'humidity_state': this.plandata[i]['humidity_state'],
+          'temp_state': this.plandata[i]['temp_state'],
+          'daily': this.plandata[i]['daily'][0]['daily_time'],
+          'daily_duration': this.plandata[i]['daily'][0]['action']['duration'] + ' Seconds',
+          'weekly': this.plandata[i]['weekly'][0]['weekly_time'],
+          'weekly_duration': this.plandata[i]['weekly'][0]['action']['duration'] + ' Seconds',
+          'monthly': this.plandata[i]['monthly'][0]['monthly_time'],
+          'monthly_duration': this.plandata[i]['monthly'][0]['action']['duration'] + ' Seconds'
+        })
+      }
+    },
+    computed: {
+      pagedData () {
+        return this.tableData.slice(this.from, this.to)
+      },
+      queriedData () {
+        if (!this.searchQuery) {
+          this.pagination.total = this.tableData.length
+          return this.pagedData
+        }
+        let result = this.tableData
+          .filter((row) => {
+            let isIncluded = false
+            for (let key of this.propsToSearch) {
+              let rowValue = row[key].toString()
+              if (rowValue.includes && rowValue.includes(this.searchQuery)) {
+                isIncluded = true
+              }
+            }
+            return isIncluded
+          })
+        this.pagination.total = result.length
+        return result.slice(this.from, this.to)
+      },
+      to () {
+        let highBound = this.from + this.pagination.perPage
+        if (this.total < highBound) {
+          highBound = this.total
+        }
+        return highBound
+      },
+      from () {
+        return this.pagination.perPage * (this.pagination.currentPage - 1)
+      },
+      total () {
+        this.pagination.total = this.tableData.length
+        return this.tableData.length
+      }
     },
     data () {
       return {
@@ -279,7 +353,69 @@
         },
         session: store.state.session,
         planname: null,
-        response: null
+        response: null,
+        tableData: [],
+        plandata: store.state.plan,
+        pagination: {
+          perPage: 10,
+          currentPage: 1,
+          perPageOptions: [5, 10, 25, 50],
+          total: 0
+        },
+        searchQuery: '',
+        propsToSearch: ['name', 'light_state', 'humidity_state', 'temp_state', 'daily', 'daily_duration', 'weekly', 'weekly_duration', 'monthly', 'monthly_duration'],
+        tableColumns: [
+          {
+            prop: 'name',
+            label: 'Name',
+            minWidth: 100
+          },
+          {
+            prop: 'light_state',
+            label: 'Light',
+            minWidth: 100
+          },
+          {
+            prop: 'humidity_state',
+            label: 'Humidity',
+            minWidth: 100
+          },
+          {
+            prop: 'temp_state',
+            label: 'Temperature',
+            minWidth: 100
+          },
+          {
+            prop: 'daily',
+            label: 'Daily',
+            minWidth: 100
+          },
+          {
+            prop: 'daily_duration',
+            label: 'Daily Duration',
+            minWidth: 100
+          },
+          {
+            prop: 'weekly',
+            label: 'Weekly',
+            minWidth: 100
+          },
+          {
+            prop: 'weekly_duration',
+            label: 'Weekly Duration',
+            minWidth: 100
+          },
+          {
+            prop: 'monthly',
+            label: 'Monthly',
+            minWidth: 100
+          },
+          {
+            prop: 'monthly_duration',
+            label: 'Monthly Duration',
+            minWidth: 100
+          }
+        ]
       }
     },
     methods: {
@@ -293,7 +429,7 @@
             'light_state': Number(store.state.lightvalue),
             'humidity_state': Number(store.state.humidityvalue),
             'temp_state': Number(store.state.temperaturevalue),
-            'moisture_state': Number(store.state.soilmoisturevalue),
+            // 'moisture_state': Number(store.state.soilmoisturevalue),
             'daily': [
               {
                 'daily_time': this.time.dailyTime,
