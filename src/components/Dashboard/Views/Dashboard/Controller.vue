@@ -8,7 +8,7 @@
           <b class="caret"></b>
         </button>
         <li><router-link to="/controllerselect"><a>Select Controller</a></router-link></li>
-        <li><router-link to="/admin/overview"><a>Create Controller</a></router-link></li>
+        <li><router-link to="/controllercreate"><a>Create Controller</a></router-link></li>
 
       </drop-down>
     </div>

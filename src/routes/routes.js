@@ -23,8 +23,12 @@ import Plan from 'src/components/Dashboard/Views/Plan.vue'
 // Summary
 import Summary from 'src/components/Dashboard/Views/Summary.vue'
 
+// Controller create
+import ControllerCreate from 'src/components/Dashboard/Views/ControllerCreate.vue'
+
 // Controller Select
 import ControllerSelect from 'src/components/Dashboard/Views/ControllerSelect.vue'
+
 
 let measurementMenu = {
   path: '/measurement',
@@ -85,6 +89,11 @@ const routes = [
         path: 'controllerselect',
         name: 'Select a Controller',
         component: ControllerSelect
+      },
+      {
+        path: 'controllercreate',
+        name: 'New Controller',
+        component: ControllerCreate
       }
     ]
   },
