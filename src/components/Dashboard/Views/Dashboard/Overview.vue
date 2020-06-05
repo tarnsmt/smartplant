@@ -339,7 +339,7 @@
           hr = 12
         } else if (hr > 12) {
           hr = hr % 12
-          mid = 'PM'
+          mid = ' '
         }
         this.timestamp = hr + mid
         return this.timestamp

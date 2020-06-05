@@ -24,6 +24,12 @@
         </form>
         <ul class="nav navbar-nav navbar-right">
           <li class="open">
+            <router-link to="/admin/overvies" class="dropdown-toggle btn-magnify" data-toggle="dropdown">
+              <i class="ti-plus"></i>
+              <p>Create Controller</p>
+            </router-link>
+          </li>
+          <li class="open">
             <a @click='logout' class="dropdown-toggle btn-magnify" data-toggle="dropdown">
               <i class="ti-shift-right"></i>
               <p>Logout</p>

@@ -3,6 +3,7 @@ import DashboardLayout from '../components/Dashboard/Layout/DashboardLayout.vue'
 import NotFound from '../components/GeneralViews/NotFoundPage.vue'
 // Dashboard pages
 import Overview from 'src/components/Dashboard/Views/Dashboard/Overview.vue'
+import Controller from 'src/components/Dashboard/Views/Dashboard/Controller.vue'
 
 // Measurement pages
 import Light from 'src/components/Dashboard/Views/Measurement/Light.vue'
@@ -15,11 +16,15 @@ import Register from 'src/components/Dashboard/Views/Pages/Register.vue'
 
 // Calendar
 import Calendar from 'src/components/Dashboard/Views/Calendar/CalendarRoute.vue'
+
 // Plan
 import Plan from 'src/components/Dashboard/Views/Plan.vue'
 
-// Plan
+// Summary
 import Summary from 'src/components/Dashboard/Views/Summary.vue'
+
+// Controller Select
+import ControllerSelect from 'src/components/Dashboard/Views/ControllerSelect.vue'
 
 let measurementMenu = {
   path: '/measurement',
@@ -75,6 +80,11 @@ const routes = [
         path: 'summary',
         name: 'Summary',
         component: Summary
+      },
+      {
+        path: 'controllerselect',
+        name: 'Select a Controller',
+        component: ControllerSelect
       }
     ]
   },
@@ -84,8 +94,13 @@ const routes = [
   {
     path: '/admin',
     component: DashboardLayout,
-    redirect: '/admin/overview',
+    redirect: '/admin/controller',
     children: [
+      {
+        path: 'controller',
+        name: 'Controller',
+        component: Controller
+      },
       {
         path: 'overview',
         name: 'Overview',
