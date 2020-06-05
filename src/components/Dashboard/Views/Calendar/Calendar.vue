@@ -37,7 +37,7 @@
             right: 'prev,next,today'
           },
           defaultDate: today,
-          selectable: true,
+          selectable: false,
           selectHelper: true,
           views: {
             month: { // name of view
