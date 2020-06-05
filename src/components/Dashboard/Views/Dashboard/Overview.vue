@@ -210,6 +210,7 @@
         username: store.state.username,
         password: store.state.password,
         login: store.state.login,
+        plan: store.state.plan,
         uv: null,
         humidity: null,
         temperature: null,
@@ -269,6 +270,16 @@
           this.statsCards[0]['value'] = (Number(this.temperature) / 10).toFixed(2) + ' °C'
           this.statsCards[1]['value'] = this.humidity + ' %'
           this.statsCards[3]['value'] = this.condition
+        }
+      )
+      await axios.get('http://34.87.108.195/api/v1/plan', {headers: {'session': this.session}}).then(
+        res => {
+          var i
+          for (i = 0; i < res.data['result'].length; i++) {
+            if (res.data['result'][i]['plan_id'] === 'adbc08e4-bfaf-49d6-acc1-b91e661d9099') {
+              store.commit('PLAN_CHANGE', res.data['result'][i])
+            }
+          }
         }
       )
     },
