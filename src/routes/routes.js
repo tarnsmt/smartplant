@@ -13,7 +13,7 @@ import Temperature from 'src/components/Dashboard/Views/Measurement/Temperature.
 import Login from 'src/components/Dashboard/Views/Pages/Login.vue'
 import Register from 'src/components/Dashboard/Views/Pages/Register.vue'
 import Controller from 'src/components/Dashboard/Views/Pages/Controller.vue'
-import ControllerCreate from 'src/components/Dashboard/Views/Pages/ControllerCreate.vue'
+// import ControllerCreate from 'src/components/Dashboard/Views/Pages/ControllerCreate.vue'
 
 // Calendar
 import Calendar from 'src/components/Dashboard/Views/Calendar/CalendarRoute.vue'
@@ -25,7 +25,7 @@ import Plan from 'src/components/Dashboard/Views/Plan.vue'
 import Summary from 'src/components/Dashboard/Views/Summary.vue'
 
 // Controller Select
-import ControllerSelect from 'src/components/Dashboard/Views/ControllerSelect.vue'
+// import ControllerSelect from 'src/components/Dashboard/Views/ControllerSelect.vue'
 
 
 let measurementMenu = {
@@ -67,13 +67,13 @@ let controllerPage = {
   name: 'Controller',
   component: Controller
 }
-
+/*
 let controllerCreatePage = {
   path: '/controllerCreate',
   name: 'ControllerCreate',
   component: ControllerCreate
 }
-
+*/
 const routes = [
   {
     path: '/',
@@ -94,17 +94,17 @@ const routes = [
         path: 'summary',
         name: 'Summary',
         component: Summary
-      },
-      {
-        path: 'controllerselect',
-        name: 'Select a Controller',
-        component: ControllerSelect
-      }
+      }// ,
+      // {
+        // path: 'controllerselect',
+        // name: 'Select a Controller',
+        // component: ControllerSelect
+      // }
     ]
   },
   loginPage,
   controllerPage,
-  controllerCreatePage,
+  // controllerCreatePage,
   registerPage,
   measurementMenu,
   {
