@@ -354,6 +354,9 @@
         response: null,
         tableData: [],
         plandata: store.state.plan,
+        controllername: store.state.controllername,
+        newplanid: null,
+        payload3: {},
         pagination: {
           perPage: 10,
           currentPage: 1,
@@ -417,7 +420,7 @@
       }
     },
     methods: {
-      createPlan () {
+      async createPlan () {
         if (this.time.dailyTime === null || this.time.weeklyTime === null || this.time.monthlyTime === null || this.duration.dailyDuration === null || this.duration.weeklyDuration === null || this.duration.monthlyDuration === null || this.planname === null) {
           alert('Some information is missing please check')
         } else {
@@ -459,9 +462,61 @@
               }
             ]
           }
-          axios.put('http://34.87.108.195/api/v1/plan/adbc08e4-bfaf-49d6-acc1-b91e661d9099', payload, {headers: {'session': this.session}}).then(
+          let payload2 = {
+            'name': this.planname + 's',
+            'light_state': Number(store.state.lightvalue),
+            'humidity_state': Number(store.state.humidityvalue),
+            'temp_state': Number(store.state.temperaturevalue),
+            'moisture_state': Number(store.state.soilmoisturevalue) * 10,
+            'daily': [
+              {
+                'daily_time': this.time.dailyTime,
+                'action': {
+                  'type': this.type.dailyType,
+                  'level': 0,
+                  'duration': Number(this.duration.dailyDuration)
+                }
+              }
+            ],
+            'weekly': [
+              {
+                'weekly_time': this.day.weeklyDay + ':' + this.time.weeklyTime,
+                'action': {
+                  'type': this.type.weeklyType,
+                  'level': 0,
+                  'duration': Number(this.duration.weeklyDuration)
+                }
+              }
+            ],
+            'monthly': [
+              {
+                'monthly_time': this.day.monthlyDay + ':' + this.time.monthlyTime,
+                'action': {
+                  'type': this.type.monthlyType,
+                  'level': 0,
+                  'duration': Number(this.duration.monthlyDuration)
+                }
+              }
+            ]
+          }
+          await axios.put('http://34.87.108.195/api/v1/plan/adbc08e4-bfaf-49d6-acc1-b91e661d9099', payload, {headers: {'session': this.session}}).then(
             res => {
               this.response = res.data
+            }
+          )
+          await axios.post('http://34.87.108.195/api/v1/plan', payload2, {headers: {'session': this.session}}).then(
+            res => {
+              this.newplanid = res.data['result']['plan_id']
+              store.commit('PLANID_CHANGE', this.newplanid)
+            }
+          )
+          this.payload3 = {
+            'name': this.controllername,
+            'desc': 'Cute' + this.controllername,
+            'plan': this.newplanid
+          }
+          await axios.put('http://34.87.108.195/api/v1/controller/' + store.state.controllerid, this.payload3, {headers: {'session': this.session}}).then(
+            res => {
               alert('Successfully create new plan\nRedirect to dashboard')
               this.$router.push('/admin/overview')
             }
