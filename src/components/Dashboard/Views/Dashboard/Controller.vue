@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-sm-6">
-      <h4 class="card-title">EDOK</h4>
+      <h4 class="card-title">Controller</h4>
       <drop-down>
         <button slot="title" class="btn btn-block dropdown-toggle" data-toggle="dropdown">
           Select Option
