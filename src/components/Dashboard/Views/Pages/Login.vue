@@ -101,7 +101,9 @@
         info: {},
         loginstate: store.state.login,
         validate: 'credentials not match or user does not exist',
-        apipayload: {}
+        apipayload: {},
+        session: null,
+        controller_list: []
       }
     },
     store,
@@ -139,8 +141,14 @@
                 store.commit('SESSION_CHANGE', this.info['session'])
                 store.commit('USERID_CHANGE', this.info['user_id'])
                 store.commit('NAME_CHANGE', this.info['user'])
-                store.commit('CONTROLLERID_CHANGE', this.info)
                 store.commit('LOGIN_CHANGE', true)
+                this.session = this.info['session']
+              }
+            )
+            await axios.get('http://34.87.108.195/api/v1/controller', {headers: {'session': this.session}}).then(
+              res => {
+                this.controller_list = res.data['controller_list']
+                store.commit('CONTROLLERLIST_CHANGE', this.controller_list)
                 this.$router.push('/controller')
               }
             )
