@@ -3,7 +3,7 @@
     <!--Stats cards-->
     <h3>Location: {{location}}</h3>
     <div class="row">
-      <div class="col-lg-3 col-sm-6" v-for="stats in statsCards" >
+      <div class="col-lg-3 col-sm-6" v-for="stats in statsCards">
         <stats-card v-bind:style="stats.styleObject" >
           <div class="icon-big text-center" slot="header" >
             <i :class="stats.icon" v-bind:style="stats.styleIcon"></i>
@@ -222,10 +222,11 @@
         plantWaterLevel: null,
         soilmoisture: null,
         location: null,
-        summary: null,
         temp: null,
         chart_info: store.state.chart_info,
-        lowesthumiditypos: store.state.lowesthumiditypos
+        lowesthumiditypos: store.state.lowesthumiditypos,
+        realtimedata: null,
+        errorlog: ''
       }
     },
     async created () {
@@ -251,14 +252,14 @@
         Number(this.chart_info[8]['main']['humidity']),
         Number(this.chart_info[9]['main']['humidity'])]]
       this.fetchData()
-      setInterval(this.fetchData, 10000)
+      setInterval(this.fetchData, 15000)
       await axios.get('https://api.openweathermap.org/data/2.5/uvi/forecast?appid=e5f182d43d4937602e0e6797b0ec068f&lat=13.75&lon=100.50').then(
         res => {
           this.uv = res.data
           this.uv = this.uv[0]['value']
           this.statsCards[2]['value'] = this.uv
         }
-      )
+      ).catch(error => { console.log(error.response) })
       await axios.get('https://api.openweathermap.org/data/2.5/weather?q=Bangkok&appid=e5f182d43d4937602e0e6797b0ec068f').then(
         res => {
           this.information = res.data
@@ -271,17 +272,7 @@
           this.statsCards[1]['value'] = this.humidity + ' %'
           this.statsCards[3]['value'] = this.condition
         }
-      )
-      await axios.get('http://34.87.108.195/api/v1/plan', {headers: {'session': this.session}}).then(
-        res => {
-          var i
-          for (i = 0; i < res.data['result'].length; i++) {
-            if (res.data['result'][i]['plan_id'] === 'adbc08e4-bfaf-49d6-acc1-b91e661d9099') {
-              store.commit('PLAN_CHANGE', res.data['result'][i])
-            }
-          }
-        }
-      )
+      ).catch(error => { console.log(error.response) })
     },
     methods: {
       async initViewsChart () {
@@ -355,26 +346,31 @@
         this.timestamp = hr + mid
         return this.timestamp
       },
-      async fetchData () {
+      fetchData () {
+        this.controllerid = store.state.controllerid
         if (this.login) {
-          await axios.get('http://34.87.108.195/api/v1/summary/ea60c35b-79d1-49b1-9b55-86554f8c4afa', {headers: {'session': this.session}}).then(
+          axios.get('http://34.87.108.195/api/v1/data/' + store.state.controllerid, {headers: {'session': this.session}}).then(
           res => {
-            this.info = res.data
-            this.summary = res.data['summary_list']
-            this.info = this.info['summary_list'][0]
-            this.plantTemp = this.info['median_temperature']
-            this.plantHumidity = this.info['median_humidity']
-            this.plantLight = this.info['median_light']
-            this.plantWaterLevel = this.info['median_water_level']
-            this.soilmoisture = this.info['median_soil_moisture'] / 10
+            this.realtimedata = res.data['data']
+            this.plantTemp = this.realtimedata['temperature']
+            this.plantHumidity = this.realtimedata['humidity']
+            this.plantLight = this.realtimedata['light']
+            this.plantWaterLevel = this.realtimedata['water_level']
+            this.soilmoisture = this.realtimedata['soil_moisture'] / 10
             store.commit('TEMP_CHANGE', this.plantTemp)
             store.commit('LIGHT_CHANGE', this.plantLight)
             store.commit('HUMIDITY_CHANGE', this.plantHumidity)
             store.commit('WATERLEVEL_CHANGE', this.plantWaterLevel)
             store.commit('SOILMOISTURE_CHANGE', this.soilmoisture)
-            store.commit('SUMMARY_CHANGE', this.summary)
           }
-          )
+          ).catch((error) => {
+            this.errorlog = error
+            store.commit('TEMP_CHANGE', 0)
+            store.commit('LIGHT_CHANGE', 0)
+            store.commit('HUMIDITY_CHANGE', 0)
+            store.commit('WATERLEVEL_CHANGE', 999999)
+            store.commit('SOILMOISTURE_CHANGE', 0)
+          })
         }
       }
     },
