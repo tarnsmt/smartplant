@@ -24,24 +24,31 @@
     </nav>
 
     <div class="wrapper wrapper-full-page">
-      <div class="full-page lock-page" data-color="green" data-image="static/img/background/background-5.png"
-           style="background-image: url('static/img/background/background-5.png')">
-        <!--   you can change the color of the filter page using: data-color="blue | azure | green | orange | red | purple" -->
+      <div class="full-page lock-page" data-color="" data-image="static/img/background/background-5.jpg">
         <div class="content">
           <form method="#" action="#">
             <div class="card card-lock">
               <div class="author">
                 <img class="avatar" src="static/img/faces/face-2.png" alt="...">
               </div>
-              <h4>Welcome !</h4>
+              <h4 style="margin-bottom:5px">Welcome !</h4>
               <div class="col-md-10 col-md-offset-1">
+                <p slot="body">Please select an option for your controller
+                <el-tooltip content="Hardware attrached to the plant"
+                            :open-delay="300"
+                            placement="right">
+                    <p-button type="success" size="sm" icon>
+                      <i class="ti-help-alt"></i>
+                    </p-button>
+                </el-tooltip>
+                </p>
                 <drop-down>
-                  <button slot="title" class="btn btn-block dropdown-toggle" data-toggle="dropdown">
+                  <button slot="title" class="btn btn-block dropdown-toggle" data-toggle="dropdown" style="margin-top:30px">
                     Select Option
                     <b class="caret"></b>
                   </button>
-                  <li><router-link to="/controllerselect"><a>Select Controller</a></router-link></li>
-                  <li><router-link to="/controllercreate"><a>Create Controller</a></router-link></li>
+                  <li><router-link to="/controllerselect"><a class="toggleController">Select Controller</a></router-link></li>
+                  <li><router-link to="/controllercreate"><a class="toggleController">Create Controller</a></router-link></li>
 
                 </drop-down>
               </div>
@@ -55,6 +62,7 @@
             </div>
           </div>
         </footer>
+                <div class="full-page-background" style="background-image: url(static/img/background/background-5.jpg) "></div>
       </div>
     </div>
     <div class="collapse navbar-collapse off-canvas-sidebar">
@@ -69,7 +77,13 @@
   </div>
 </template>
 <script>
+  import Vue from 'vue'
+  import {Tooltip} from 'element-ui'
+  Vue.use(Tooltip)
   export default {
+    components: {
+      [Tooltip.name]: Tooltip
+    },
     methods: {
       toggleNavbar () {
         document.body.classList.toggle('nav-open')
@@ -85,4 +99,12 @@
   }
 </script>
 <style>
+.toggleController {
+  color: #333333;
+}
+
+.toggleController:hover {
+  color: #ffffff;
+}
+
 </style>

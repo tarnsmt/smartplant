@@ -7,7 +7,7 @@
                   data-toggle="collapse"
                   data-target="#navigation-example-2"
                   @click="toggleNavbar">
-            <span class="sr-only">Toggle navigation</span>
+            <span class="sr-only">Navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -30,7 +30,6 @@
     <div class="wrapper wrapper-full-page">
       <div class="full-page login-page" data-color=""
            data-image="static/img/background/background-2.jpg">
-        <!--   you can change the color of the filter page using: data-color="blue | azure | green | orange | red | purple" -->
         <div class="content">
           <div class="container">
             <div class="row">
