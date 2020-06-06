@@ -346,10 +346,10 @@
         this.timestamp = hr + mid
         return this.timestamp
       },
-      fetchData () {
+      async fetchData () {
         this.controllerid = store.state.controllerid
         if (this.login) {
-          axios.get('http://34.87.108.195/api/v1/data/' + store.state.controllerid, {headers: {'session': this.session}}).then(
+          await axios.get('http://34.87.108.195/api/v1/data/' + store.state.controllerid, {headers: {'session': this.session}}).then(
           res => {
             this.realtimedata = res.data['data']
             this.plantTemp = this.realtimedata['temperature']
@@ -371,6 +371,22 @@
             store.commit('WATERLEVEL_CHANGE', 999999)
             store.commit('SOILMOISTURE_CHANGE', 0)
           })
+          await axios.get('http://34.87.108.195/api/v1/plan', {headers: {'session': this.session}}).then(
+              res => {
+                var i
+                var t = 0
+                store.commit('CLEAR_PLAN')
+                for (i = 0; i < res.data['result'].length; i++) {
+                  if (res.data['result'][i]['plan_id'] === store.state.planid) {
+                    store.commit('PLAN_CHANGE', res.data['result'][i])
+                    t = 1
+                  }
+                }
+                if (t === 0) {
+                  store.commit('PLAN_CHANGE', [])
+                }
+              }
+            )
         }
       }
     },
