@@ -16,10 +16,22 @@
                   <input type="text" placeholder="Plant Name" class="form-control" v-model='planname'>
                 </div>
               </div>
-              <div class="form-group" v-for="info in infoDatas" >
-                <label class="col-sm-2 control-label">{{info.title}}</label>
+              <div class="form-group" >
+                <label class="col-sm-2 control-label">Light</label>
                 <div class="col-sm-10">
-                  <p class="form-control-static">{{info.value}}</p>
+                  <p class="form-control-static">{{lightvalue}}</p>
+                </div>
+                <label class="col-sm-2 control-label">Humidity</label>
+                <div class="col-sm-10">
+                  <p class="form-control-static">{{humidityvalue}}</p>
+                </div>
+                <label class="col-sm-2 control-label">Temperature</label>
+                <div class="col-sm-10">
+                  <p class="form-control-static">{{temperaturevalue}}</p>
+                </div>
+                <label class="col-sm-2 control-label">Soil Moisture</label>
+                <div class="col-sm-10">
+                  <p class="form-control-static">{{soilmoisturevalue}}</p>
                 </div>
               </div>
             </fieldset>
@@ -314,24 +326,10 @@
     },
     data () {
       return {
-        infoDatas: [
-          {
-            title: 'Light',
-            value: store.state.lightvalue
-          },
-          {
-            title: 'Humidity',
-            value: store.state.humidityvalue
-          },
-          {
-            title: 'Temperature',
-            value: store.state.temperaturevalue
-          },
-          {
-            title: 'Soil moisture',
-            value: store.state.soilmoisturevalue
-          }
-        ],
+        lightvalue: store.state.lightvalue,
+        humidityvalue: store.state.humidityvalue,
+        temperaturevalue: store.state.temperaturevalue,
+        soilmoisturevalue: store.state.soilmoisturevalue,
         time: {
           dailyTime: null,
           weekyTime: null,
@@ -461,7 +459,6 @@
               }
             ]
           }
-          console.log(payload)
           axios.put('http://34.87.108.195/api/v1/plan/adbc08e4-bfaf-49d6-acc1-b91e661d9099', payload, {headers: {'session': this.session}}).then(
             res => {
               this.response = res.data
@@ -469,7 +466,6 @@
               this.$router.push('/admin/overview')
             }
           )
-          // console.log(payload)
         }
       }
     }
