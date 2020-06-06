@@ -68,6 +68,8 @@
         store.commit('PLAN_CHANGE', [])
         store.commit('CONTROLLERLIST_CHANGE', [])
         store.commit('PLANID_CHANGE', '')
+        store.commit('CONTROLLERNAME_CHANGE', '')
+        store.commit('CLEAR_PLAN')
         store.commit('CLEAR_ARRAY')
         this.$router.push('/login')
       },
