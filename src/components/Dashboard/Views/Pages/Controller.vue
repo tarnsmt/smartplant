@@ -118,42 +118,47 @@
         )
       },
       async enter_dashboard () {
-        store.commit('CONTROLLERID_CHANGE', this.selected)
-        // store.commit('PLAN_CHANGE', [])
-        store.commit('SUMMARY_CHANGE', {})
-        await axios.get('http://34.87.108.195/api/v1/controller', {headers: {'session': this.session}}).then(
-          res => {
-            var temp = res.data['controller_list']
-            var i
-            for (i = 0; i < temp.length; i++) {
-              if (temp[i]['controller_id'] === this.selected) {
-                store.commit('PLANID_CHANGE', temp[i]['plan'])
-              }
-            }
-          }
-        )
-        await axios.get('http://34.87.108.195/api/v1/plan', {headers: {'session': this.session}}).then(
+        if (this.selected === '') {
+          alert('Please select one controller')
+        } else {
+          store.commit('CONTROLLERID_CHANGE', this.selected)
+          // store.commit('PLAN_CHANGE', [])
+          store.commit('SUMMARY_CHANGE', {})
+          await axios.get('http://34.87.108.195/api/v1/controller', {headers: {'session': this.session}}).then(
             res => {
+              var temp = res.data['controller_list']
               var i
-              var t = 0
-              store.commit('CLEAR_PLAN')
-              for (i = 0; i < res.data['result'].length; i++) {
-                if (res.data['result'][i]['plan_id'] === store.state.planid) {
-                  store.commit('PLAN_CHANGE', res.data['result'][i])
-                  t = 1
+              for (i = 0; i < temp.length; i++) {
+                if (temp[i]['controller_id'] === this.selected) {
+                  store.commit('PLANID_CHANGE', temp[i]['plan'])
+                  store.commit('CONTROLLERNAME_CHANGE', temp[i]['name'])
                 }
               }
-              if (t === 0) {
-                store.commit('PLAN_CHANGE', [])
+            }
+          )
+          await axios.get('http://34.87.108.195/api/v1/plan', {headers: {'session': this.session}}).then(
+              res => {
+                var i
+                var t = 0
+                store.commit('CLEAR_PLAN')
+                for (i = 0; i < res.data['result'].length; i++) {
+                  if (res.data['result'][i]['plan_id'] === store.state.planid) {
+                    store.commit('PLAN_CHANGE', res.data['result'][i])
+                    t = 1
+                  }
+                }
+                if (t === 0) {
+                  store.commit('PLAN_CHANGE', [])
+                }
               }
-            }
-          )
-        await axios.get('http://34.87.108.195/api/v1/summary/' + store.state.controllerid, {headers: {'session': this.session}}).then(
-            res => {
-              store.commit('SUMMARY_CHANGE', res.data['summary_list'])
-            }
-          )
-        this.$router.push('/admin/overview')
+            )
+          await axios.get('http://34.87.108.195/api/v1/summary/' + store.state.controllerid, {headers: {'session': this.session}}).then(
+              res => {
+                store.commit('SUMMARY_CHANGE', res.data['summary_list'])
+              }
+            )
+          this.$router.push('/admin/overview')
+        }
       },
       toggleNavbar () {
         document.body.classList.toggle('nav-open')
