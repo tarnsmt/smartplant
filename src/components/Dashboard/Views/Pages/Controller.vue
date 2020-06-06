@@ -34,9 +34,6 @@
                 <img class="avatar" src="static/img/faces/face-2.png" alt="...">
               </div>
               <h4>Welcome !</h4>
-              <div class="form-group">
-                <input type="password" placeholder="Enter Password" class="form-control">
-              </div>
               <div class="col-md-10 col-md-offset-1">
                 <drop-down>
                   <button slot="title" class="btn btn-block dropdown-toggle" data-toggle="dropdown">
