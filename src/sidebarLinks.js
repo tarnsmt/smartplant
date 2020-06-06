@@ -4,10 +4,6 @@ export default [
     icon: 'ti-panel',
     collapsed: false,
     children: [{
-      name: 'Controller',
-      path: '/admin/controller'
-    },
-    {
       name: 'Overview',
       path: '/admin/overview'
     }]

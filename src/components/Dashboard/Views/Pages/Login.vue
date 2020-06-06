@@ -7,7 +7,7 @@
                   data-toggle="collapse"
                   data-target="#navigation-example-2"
                   @click="toggleNavbar">
-            <span class="sr-only">Toggle navigation</span>
+            <span class="sr-only">Navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -30,7 +30,6 @@
     <div class="wrapper wrapper-full-page">
       <div class="full-page login-page" data-color=""
            data-image="static/img/background/background-2.jpg">
-        <!--   you can change the color of the filter page using: data-color="blue | azure | green | orange | red | purple" -->
         <div class="content">
           <div class="container">
             <div class="row">
@@ -52,7 +51,7 @@
                     </div>
                     <div class="card-footer text-center">
                       <button class="btn btn-fill btn-wd ">
-                        <a @click='login'>Login</a>
+                        <a @click='login' style="color:white">Login</a>
                       </button>
                       <div class="forgot">
                         <router-link to="/register">
@@ -79,10 +78,10 @@
     </div>
     <div class="collapse navbar-collapse off-canvas-sidebar">
       <ul class="nav nav-mobile-menu">
-        <router-link to="/register" tag="li">
+        <router-link to="/register" tag="li" >
           <a>Register</a>
         </router-link>
-        <router-link to="/admin/controller" tag="li">
+        <router-link to="/admin/overview" tag="li">
           <a>Dashboard</a>
         </router-link>
       </ul>
@@ -108,7 +107,7 @@
     store,
     methods: {
       checkLogin () {
-        if (this.loginstate) { this.$router.push('/admin/controller') } else { alert('Please Login or Register before enter the dashboard') }
+        if (this.loginstate) { this.$router.push('/controller') } else { alert('Please Login or Register before enter the dashboard') }
       },
       async login () {
         if (this.username === null || this.password === null) {
@@ -142,7 +141,7 @@
                 store.commit('NAME_CHANGE', this.info['user'])
                 store.commit('CONTROLLERID_CHANGE', this.info)
                 store.commit('LOGIN_CHANGE', true)
-                this.$router.push('/admin/controller')
+                this.$router.push('/controller')
               }
             )
           }
