@@ -24,9 +24,9 @@
         </form>
         <ul class="nav navbar-nav navbar-right">
           <li class="open">
-            <router-link to="/controllercreate" class="dropdown-toggle btn-magnify" data-toggle="dropdown">
+            <router-link to="/controller" class="dropdown-toggle btn-magnify" data-toggle="dropdown">
               <i class="ti-plus"></i>
-              <p>Create Controller</p>
+              <p>Switch Controller</p>
             </router-link>
           </li>
           <li class="open">
@@ -64,6 +64,11 @@
         store.commit('WATERLEVEL_CHANGE', '')
         store.commit('SOILMOISTURE_CHANGE', '')
         store.commit('SUMMARY_CHANGE', {})
+        store.commit('CHARTINFO_CHANGE', [])
+        store.commit('PLAN_CHANGE', [])
+        store.commit('CONTROLLERLIST_CHANGE', [])
+        store.commit('PLANID_CHANGE', '')
+        store.commit('CLEAR_ARRAY')
         this.$router.push('/login')
       },
       capitalizeFirstLetter (string) {
