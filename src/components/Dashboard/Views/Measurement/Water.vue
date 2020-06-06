@@ -17,7 +17,7 @@
             <span slot="header" class="label label-info">Water container</span>
             <p slot="body"><b>61-100 %</b> : High</p>
             <p slot="body"><b>31-60 %</b> : Medium</p>
-            <p slot="body"><b>&lt30 %</b> : Low (Need to refill)</p>
+            <p slot="body"><b>&lt;30 %</b> : Low (Need to refill)</p>
           </time-line-item>
 
         </time-line>
@@ -73,12 +73,15 @@
         this.waterlevelvalue = 60
       } else if (Number(this.waterlevelvalue) <= 1000) {
         this.waterlevelvalue = 25
+      } else if (Number(this.waterlevelvalue) > 10000) {
+        this.waterlevelvalue = 0
       }
       this.refreshsoilmois()
-      setInterval(this.refreshsoilmois, 10000)
+      setInterval(this.refreshsoilmois, 15000)
     },
     methods: {
       refreshsoilmois () {
+        /*
         var t = Math.floor(Math.random() * 10) + 1
         var r = Math.floor(Math.random() * 2)
         if (r === 0) {
@@ -86,6 +89,9 @@
         } else {
           this.realtimesoilmois = (this.soilmoisturevalue - t).toFixed(1)
         }
+        */
+        this.soilmoisturevalue = store.state.soilmoisturevalue
+        this.realtimesoilmois = store.state.soilmoisturevalue
       }
     }
   }

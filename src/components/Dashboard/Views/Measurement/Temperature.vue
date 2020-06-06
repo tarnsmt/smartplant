@@ -6,7 +6,7 @@
 
           <time-line-item class="timeline-inverted" badge-type="primary">
             <span slot="header" class="label label-info">Humidity</span>
-            <p slot="body"><b> &lt30 %</b> : Humidity level in the average home</p>
+            <p slot="body"><b> &lt;30 %</b> : Humidity level in the average home</p>
             <p slot="body"><b>40 %</b> : most desert dwellers such as cacti</p>
             <p slot="body"><b>50-60 %</b> : general plants including house plant</p>
             <p slot="body"><b>>60 %</b> : Thin-leaf house plants</p>
@@ -69,11 +69,12 @@
     created () {
       this.refreshtemp()
       this.refreshhumi()
-      setInterval(this.refreshtemp, 10000)
-      setInterval(this.refreshhumi, 10000)
+      setInterval(this.refreshtemp, 15000)
+      setInterval(this.refreshhumi, 15000)
     },
     methods: {
       refreshtemp () {
+        /*
         var t = Math.floor(Math.random() * 2) + 1
         var r = Math.floor(Math.random() * 2)
         if (r === 0) {
@@ -81,8 +82,12 @@
         } else {
           this.realtimetemp = this.temperaturevalue - t
         }
+        */
+        this.temperaturevalue = store.state.temperaturevalue
+        this.realtimetemp = store.state.temperaturevalue
       },
       refreshhumi () {
+        /*
         var t = Math.floor(Math.random() * 5) + 1
         var r = Math.floor(Math.random() * 2)
         if (r === 0) {
@@ -90,6 +95,9 @@
         } else {
           this.realtimehumi = this.humidityvalue - t
         }
+        */
+        this.humidityvalue = store.state.humidityvalue
+        this.realtimehumi = store.state.humidityvalue
       }
     }
   }

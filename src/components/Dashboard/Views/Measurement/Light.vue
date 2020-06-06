@@ -65,10 +65,11 @@
     },
     created () {
       this.refresh()
-      setInterval(this.refresh, 10000)
+      setInterval(this.refresh, 15000)
     },
     methods: {
       refresh () {
+        /*
         var t = Math.floor(Math.random() * 100) + 1
         var r = Math.floor(Math.random() * 2)
         if (r === 0) {
@@ -76,6 +77,9 @@
         } else {
           this.realtimelight = this.lightvalue - t
         }
+        */
+        this.lightvalue = store.state.lightvalue
+        this.realtimelight = store.state.lightvalue
       }
     }
   }
