@@ -23,7 +23,8 @@ const state = {
   chart_info: [],
   plan: [],
   planid: '',
-  controller_list: []
+  controller_list: [],
+  controllername: ''
 }
 
 // Create an object storing various mutations. We will write the mutation
@@ -84,6 +85,9 @@ const mutations = {
     state.chart_info.length = 0
     state.plan.length = 0
     state.controller_list.length = 0
+  },
+  CONTROLLERNAME_CHANGE: (state, value) => {
+    state.controllername = value
   }
 }
 
@@ -103,7 +107,8 @@ const getters = {
   chart_info: state => state.chart_info,
   plan: state => state.plan,
   planid: state => state.planid,
-  controller_list: state => state.controller_list
+  controller_list: state => state.controller_list,
+  controllername: state => state.controllername
 }
 
 const actions = {
@@ -160,6 +165,9 @@ const actions = {
   },
   clearPlan: (state) => {
     store.commit('CLEAR_PLAN')
+  },
+  saveControllerName: (state, value) => {
+    store.commit('CONTROLLERNAME_CHANGE', value)
   }
 }
 
