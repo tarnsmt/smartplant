@@ -3,7 +3,6 @@ import DashboardLayout from '../components/Dashboard/Layout/DashboardLayout.vue'
 import NotFound from '../components/GeneralViews/NotFoundPage.vue'
 // Dashboard pages
 import Overview from 'src/components/Dashboard/Views/Dashboard/Overview.vue'
-import Controller from 'src/components/Dashboard/Views/Dashboard/Controller.vue'
 
 // Measurement pages
 import Light from 'src/components/Dashboard/Views/Measurement/Light.vue'
@@ -13,6 +12,7 @@ import Temperature from 'src/components/Dashboard/Views/Measurement/Temperature.
 // Pages
 import Login from 'src/components/Dashboard/Views/Pages/Login.vue'
 import Register from 'src/components/Dashboard/Views/Pages/Register.vue'
+import Controller from 'src/components/Dashboard/Views/Pages/Controller.vue'
 
 // Calendar
 import Calendar from 'src/components/Dashboard/Views/Calendar/CalendarRoute.vue'
@@ -64,6 +64,12 @@ let registerPage = {
   component: Register
 }
 
+let controllerPage = {
+  path: '/controller',
+  name: 'Controller',
+  component: Controller
+}
+
 const routes = [
   {
     path: '/',
@@ -98,6 +104,7 @@ const routes = [
     ]
   },
   loginPage,
+  controllerPage,
   registerPage,
   measurementMenu,
   {
@@ -105,11 +112,6 @@ const routes = [
     component: DashboardLayout,
     redirect: '/admin/controller',
     children: [
-      {
-        path: 'controller',
-        name: 'Controller',
-        component: Controller
-      },
       {
         path: 'overview',
         name: 'Overview',

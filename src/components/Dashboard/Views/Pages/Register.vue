@@ -8,7 +8,7 @@
                   @click="toggleNavbar"
                   data-toggle="collapse"
                   data-target="#navigation-example-2">
-            <span class="sr-only">Toggle navigation</span>
+            <span class="sr-only">Navigation</span>
             <span class="icon-bar "></span>
             <span class="icon-bar "></span>
             <span class="icon-bar"></span>
@@ -85,7 +85,7 @@
                     <div class="footer text-center">
                       <button class="btn btn-fill btn-danger btn-wd ">
                         <router-link to="/login">
-                          <a @click='createAccount'>Create Account</a>
+                          <a @click='createAccount' style="color:white">Create Account</a>
                         </router-link>
                       </button>
                     </div>
