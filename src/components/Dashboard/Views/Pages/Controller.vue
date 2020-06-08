@@ -122,6 +122,7 @@
           alert('Please select one controller')
         } else {
           store.commit('CONTROLLERID_CHANGE', this.selected)
+          // console.log(store.state.controllerid)
           // store.commit('PLAN_CHANGE', [])
           store.commit('SUMMARY_CHANGE', {})
           await axios.get('http://34.87.108.195/api/v1/controller', {headers: {'session': this.session}}).then(
