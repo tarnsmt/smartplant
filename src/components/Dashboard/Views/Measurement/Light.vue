@@ -65,7 +65,7 @@
     },
     created () {
       this.refresh()
-      setInterval(this.refresh, 15000)
+      setInterval(this.refresh, 7000)
     },
     methods: {
       refresh () {

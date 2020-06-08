@@ -69,8 +69,8 @@
     created () {
       this.refreshtemp()
       this.refreshhumi()
-      setInterval(this.refreshtemp, 15000)
-      setInterval(this.refreshhumi, 15000)
+      setInterval(this.refreshtemp, 7000)
+      setInterval(this.refreshhumi, 7000)
     },
     methods: {
       refreshtemp () {

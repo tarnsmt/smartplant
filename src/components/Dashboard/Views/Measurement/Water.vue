@@ -77,7 +77,7 @@
         this.waterlevelvalue = 0
       }
       this.refreshsoilmois()
-      setInterval(this.refreshsoilmois, 15000)
+      setInterval(this.refreshsoilmois, 7000)
     },
     methods: {
       refreshsoilmois () {

@@ -252,7 +252,7 @@
         Number(this.chart_info[8]['main']['humidity']),
         Number(this.chart_info[9]['main']['humidity'])]]
       this.fetchData()
-      setInterval(this.fetchData, 15000)
+      setInterval(this.fetchData, 7000)
       await axios.get('https://api.openweathermap.org/data/2.5/uvi/forecast?appid=e5f182d43d4937602e0e6797b0ec068f&lat=13.75&lon=100.50').then(
         res => {
           this.uv = res.data
