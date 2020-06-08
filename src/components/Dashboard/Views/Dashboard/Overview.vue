@@ -377,10 +377,7 @@
                 var t = 0
                 store.commit('CLEAR_PLAN')
                 for (i = 0; i < res.data['result'].length; i++) {
-                  if (res.data['result'][i]['plan_id'] === store.state.planid) {
-                    store.commit('PLAN_CHANGE', res.data['result'][i])
-                    t = 1
-                  }
+                  store.commit('PLAN_CHANGE', res.data['result'][i])
                 }
                 if (t === 0) {
                   store.commit('PLAN_CHANGE', [])
