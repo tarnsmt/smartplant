@@ -2,6 +2,7 @@
 <form>
   <div class="row">
     <div class="col-md-12">
+      <h3>Current plan: {{showplan}}</h3>
       <div class="card">
         <!-- <div class="card-header">
           <h4 class="card-title">Create a plan</h4>
@@ -327,6 +328,7 @@
         humidityvalue: store.state.humidityvalue,
         temperaturevalue: store.state.temperaturevalue,
         soilmoisturevalue: store.state.soilmoisturevalue,
+        showplan: store.state.showplan,
         time: {
           dailyTime: null,
           weekyTime: null,
@@ -348,6 +350,7 @@
         },
         session: store.state.session,
         planname: null,
+        planid: store.state.planid,
         response: null,
         tableData: [],
         lightinput: null,
