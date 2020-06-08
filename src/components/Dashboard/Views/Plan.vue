@@ -19,19 +19,19 @@
               <div class="form-group" >
                 <label class="col-sm-2 control-label">Light</label>
                 <div class="col-sm-10">
-                  <p class="form-control-static">{{lightvalue}}</p>
+                  <input type="number" placeholder="value" class="form-control" v-model='lightinput'>
                 </div>
                 <label class="col-sm-2 control-label">Humidity</label>
                 <div class="col-sm-10">
-                  <p class="form-control-static">{{humidityvalue}}</p>
+                  <input type="number" placeholder="value" class="form-control" v-model='humidityinput'>
                 </div>
                 <label class="col-sm-2 control-label">Temperature</label>
                 <div class="col-sm-10">
-                  <p class="form-control-static">{{temperaturevalue}}</p>
+                  <input type="number" placeholder="value" class="form-control" v-model='temperatureinput'>
                 </div>
                 <label class="col-sm-2 control-label">Soil Moisture</label>
                 <div class="col-sm-10">
-                  <p class="form-control-static">{{soilmoisturevalue}}</p>
+                  <input type="number" placeholder="value" class="form-control" v-model='soilmoistureinput'>
                 </div>
               </div>
             </fieldset>
@@ -74,7 +74,6 @@
               <div class="form-group">
                 <label class="col-sm-3 control-label">Type</label>
                 <div class="col-sm-3">
-                  <p-radio label="light" v-model="type.dailyType">Light</p-radio>
                   <p-radio label="water" v-model="type.dailyType">Water</p-radio>
                 </div>
               </div>
@@ -124,7 +123,6 @@
                 <div class="form-group">
                   <label class="col-sm-3 control-label">Type</label>
                   <div class="col-sm-3">
-                    <p-radio label="light" v-model="type.weeklyType">Light</p-radio>
                     <p-radio label="water" v-model="type.weeklyType">Water</p-radio>
                   </div>
                 </div>
@@ -195,7 +193,6 @@
                 <div class="form-group">
                   <label class="col-sm-3 control-label">Type</label>
                   <div class="col-sm-3">
-                    <p-radio label="light" v-model="type.monthlyType">Light</p-radio>
                     <p-radio label="water" v-model="type.monthlyType">Water</p-radio>
                   </div>
                 </div>
@@ -336,9 +333,9 @@
           monthlyTime: null
         },
         type: {
-          dailyType: 'light',
-          weeklyType: 'light',
-          monthlyType: 'light'
+          dailyType: 'water',
+          weeklyType: 'water',
+          monthlyType: 'water'
         },
         day: {
           weeklyDay: '1',
@@ -353,12 +350,16 @@
         planname: null,
         response: null,
         tableData: [],
+        lightinput: null,
+        humidityinput: null,
+        temperatureinput: null,
+        soilmoistureinput: null,
         plandata: store.state.plan,
         controllername: store.state.controllername,
         newplanid: null,
         payload3: {},
         pagination: {
-          perPage: 10,
+          perPage: 15,
           currentPage: 1,
           perPageOptions: [5, 10, 25, 50],
           total: 0
@@ -421,16 +422,17 @@
     },
     methods: {
       async createPlan () {
-        if (this.time.dailyTime === null || this.time.weeklyTime === null || this.time.monthlyTime === null || this.duration.dailyDuration === null || this.duration.weeklyDuration === null || this.duration.monthlyDuration === null || this.planname === null) {
+        if (this.time.dailyTime === null || this.time.weeklyTime === null || this.time.monthlyTime === null || this.duration.dailyDuration === null || this.duration.weeklyDuration === null || this.duration.monthlyDuration === null || this.planname === null || this.lightinput === null || this.temperatureinput === null || this.soilmoistureinput === null || this.humidityinput === null) {
           alert('Some information is missing please check')
         } else {
+          /*
           let payload = {
             'name': this.planname,
             'desc': 'Beautiful flower',
-            'light_state': Number(store.state.lightvalue),
-            'humidity_state': Number(store.state.humidityvalue),
-            'temp_state': Number(store.state.temperaturevalue),
-            // 'moisture_state': Number(store.state.soilmoisturevalue),
+            'light_state': Number(this.lightinput),
+            'humidity_state': Number(this.humidityinput),
+            'temp_state': Number(this.temperatureinput),
+            'moisture_state': Number(this.soilmoistureinput),
             'daily': [
               {
                 'daily_time': this.time.dailyTime,
@@ -462,12 +464,13 @@
               }
             ]
           }
+          */
           let payload2 = {
             'name': this.planname + 's',
-            'light_state': Number(store.state.lightvalue),
-            'humidity_state': Number(store.state.humidityvalue),
-            'temp_state': Number(store.state.temperaturevalue),
-            'moisture_state': Number(store.state.soilmoisturevalue) * 10,
+            'light_state': Number(this.lightinput),
+            'humidity_state': Number(this.humidityinput),
+            'temp_state': Number(this.temperatureinput),
+            'moisture_state': Number(this.soilmoistureinput),
             'daily': [
               {
                 'daily_time': this.time.dailyTime,
@@ -499,14 +502,16 @@
               }
             ]
           }
+          /*
           await axios.put('http://34.87.108.195/api/v1/plan/adbc08e4-bfaf-49d6-acc1-b91e661d9099', payload, {headers: {'session': this.session}}).then(
             res => {
               this.response = res.data
             }
           )
+          */
           await axios.post('http://34.87.108.195/api/v1/plan', payload2, {headers: {'session': this.session}}).then(
             res => {
-              this.newplanid = res.data['result']['plan_id']
+              this.newplanid = res.data['result']
               store.commit('PLANID_CHANGE', this.newplanid)
             }
           )
